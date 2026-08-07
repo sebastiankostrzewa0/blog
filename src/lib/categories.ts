@@ -33,6 +33,16 @@ export const CATEGORIES: readonly CategoryMeta[] = [
     label: 'ContTech',
     description: 'Technologia w budownictwie — cyfryzacja placu budowy, BIM, IoT na budowie.',
   },
+  {
+    slug: 'dane',
+    label: 'Dane',
+    description: 'Rynek mieszkaniowy w liczbach — pozwolenia na budowę, ceny transakcyjne, GUS i dane.gov.pl.',
+  },
+  {
+    slug: 'kontrowersje',
+    label: 'Kontrowersje',
+    description: 'Krytyczne spojrzenie na praktyki branży — marketing, standardy, to, co się nie mówi wprost.',
+  },
 ] as const;
 
 // Zod's z.enum() needs a non-empty string tuple; CATEGORIES is the source of
