@@ -1,41 +1,43 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { formatDate, readingTime, slugifyTag } from '@/lib/format';
+import { getCategoryMeta } from '@/lib/categories';
+import CategoryBadge from '@/components/CategoryBadge.astro';
+import PostCard from '@/components/PostCard.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   post: CollectionEntry<'blog'>;
-  headings: { depth: number; slug: string; text: string }[];
+  related: CollectionEntry<'blog'>[];
 }
 
-const { post } = Astro.props;
-const { title, description, pubDate, updatedDate, tags, author } = post.data;
-const minutes = readingTime(post.body ?? '');
+const { post, related } = Astro.props;
+const { title, excerpt, date, category, tags, author, slug } = post.data;
+const minutes = post.data.readingTime ?? readingTime(post.body ?? '');
+const categoryMeta = getCategoryMeta(category);
 ---
 
 <BaseLayout
   title={title}
-  description={description}
-  image={`/og/${post.id}.png`}
+  description={excerpt}
+  image={`/og/${category}/${slug}.png`}
   type="article"
-  publishedTime={pubDate}
-  modifiedTime={updatedDate}
+  publishedTime={date}
   tags={tags}
+  category={categoryMeta?.label ?? category}
+  author={author}
 >
   <article class="wrap post">
     <header class="post__header">
-      <p class="eyebrow">{tags[0] ?? 'Artykuł'}</p>
+      <CategoryBadge category={category} size="md" />
       <h1>{title}</h1>
       <p class="post__meta">
-        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
         <span aria-hidden="true">·</span>
         <span>{minutes} min czytania</span>
         <span aria-hidden="true">·</span>
         <span>{author}</span>
       </p>
-      {updatedDate && (
-        <p class="post__updated">Zaktualizowano {formatDate(updatedDate)}</p>
-      )}
     </header>
 
     <hr class="hairline post__rule" />
@@ -47,15 +49,24 @@ const minutes = readingTime(post.body ?? '');
     {tags.length > 0 && (
       <footer class="post__tags">
         {tags.map((tag) => (
-          <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>#{tag}</a>
+          <a class="tag" href={`/tag/${slugifyTag(tag)}/`}>#{tag}</a>
         ))}
       </footer>
     )}
 
     <nav class="post__back">
-      <a href="/blog/" class="btn">← Wszystkie artykuły</a>
+      <a href={`/${category}/`} class="btn">← Więcej z kategorii {categoryMeta?.label ?? category}</a>
     </nav>
   </article>
+
+  {related.length > 0 && (
+    <section class="wrap related">
+      <p class="section-label">Powiązane artykuły</p>
+      <div class="related__list">
+        {related.map((item) => <PostCard post={item} />)}
+      </div>
+    </section>
+  )}
 </BaseLayout>
 
 <style>
@@ -67,8 +78,11 @@ const minutes = readingTime(post.body ?? '');
     max-width: var(--measure);
   }
 
-  .post__meta,
-  .post__updated {
+  .post__header h1 {
+    margin-top: 0.6rem;
+  }
+
+  .post__meta {
     font-family: var(--font-mono);
     font-size: 0.85rem;
     letter-spacing: 0.03em;
@@ -77,11 +91,6 @@ const minutes = readingTime(post.body ?? '');
     display: flex;
     gap: 0.6rem;
     margin: 0.75rem 0 0;
-  }
-
-  .post__updated {
-    margin-top: 0.35rem;
-    color: var(--color-signal);
   }
 
   .post__rule {
@@ -97,5 +106,21 @@ const minutes = readingTime(post.body ?? '');
 
   .post__back {
     margin-top: 3rem;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  .related {
+    padding-block: 1rem clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--color-border);
   }
 </style>

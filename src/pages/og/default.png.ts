@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 import { generateOgImage } from '@/lib/og';
-import { SITE_TITLE } from '@/consts';
+import { SITE_TAGLINE } from '@/consts';
 
 export const GET: APIRoute = async () => {
-  const png = await generateOgImage({ title: 'Pismo o dobrym rzemiośle', eyebrow: SITE_TITLE });
+  const png = await generateOgImage({ title: SITE_TAGLINE });
   return new Response(Buffer.from(png), {
     headers: {
       'Content-Type': 'image/png',

@@ -1,5 +1,5 @@
 ---
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_LOCALE, SITE_AUTHOR } from '@/consts';
+import { SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION, SITE_LOCALE, SITE_AUTHOR } from '@/consts';
 
 interface Props {
   title?: string;
@@ -9,6 +9,8 @@ interface Props {
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
+  category?: string;
+  author?: string;
   noindex?: boolean;
 }
 
@@ -20,10 +22,12 @@ const {
   publishedTime,
   modifiedTime,
   tags = [],
+  category,
+  author = SITE_AUTHOR,
   noindex = false,
 } = Astro.props;
 
-const pageTitle = title ? `${title} — ${SITE_TITLE}` : `${SITE_TITLE} — pismo o dobrym rzemiośle`;
+const pageTitle = title ? `${title} — ${SITE_TITLE}` : `${SITE_TITLE} — ${SITE_TAGLINE}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(image ?? '/og/default.png', Astro.site);
 
@@ -31,15 +35,16 @@ const jsonLd =
   type === 'article'
     ? {
         '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
+        '@type': 'Article',
         headline: title,
         description,
         image: ogImageURL.toString(),
         datePublished: publishedTime?.toISOString(),
         dateModified: (modifiedTime ?? publishedTime)?.toISOString(),
-        author: { '@type': 'Person', name: SITE_AUTHOR },
-        publisher: { '@type': 'Organization', name: SITE_TITLE },
+        author: { '@type': 'Person', name: author },
+        publisher: { '@type': 'Person', name: SITE_TITLE },
         mainEntityOfPage: canonicalURL.toString(),
+        articleSection: category,
         keywords: tags.join(', ') || undefined,
       }
     : {
@@ -74,6 +79,7 @@ const jsonLd =
 {type === 'article' && modifiedTime && (
   <meta property="article:modified_time" content={modifiedTime.toISOString()} />
 )}
+{type === 'article' && category && <meta property="article:section" content={category} />}
 {type === 'article' && tags.map((tag) => <meta property="article:tag" content={tag} />)}
 
 <!-- Twitter -->

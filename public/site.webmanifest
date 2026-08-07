@@ -1,7 +1,7 @@
 {
-  "name": "Meridian",
-  "short_name": "Meridian",
-  "description": "Pismo o dobrym rzemiośle: pisaniu, projektowaniu i budowaniu rzeczy na lata.",
+  "name": "Sebastian Kostrzewa — blog",
+  "short_name": "S. Kostrzewa",
+  "description": "Nieruchomości, PropTech, ContTech, architektura i biznes — blog Sebastiana Kostrzewy, foundera Raisly.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#E7E9E2",

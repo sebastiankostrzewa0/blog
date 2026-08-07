@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { CATEGORIES } from '@/lib/categories';
+import { isPublished } from '@/lib/publishing';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', isPublished);
+
+  return CATEGORIES.map((meta) => ({
+    params: { category: meta.slug },
+    props: {
+      meta,
+      posts: posts
+        .filter((post) => post.data.category === meta.slug)
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { meta, posts } = Astro.props;
+---
+
+<BaseLayout title={meta.label} description={meta.description}>
+  <section class="wrap listing">
+    <header class="listing__header">
+      <p class="eyebrow">Kategoria</p>
+      <h1>{meta.label}</h1>
+      <p class="listing__desc">{meta.description}</p>
+    </header>
+    <div class="listing__list">
+      {posts.length > 0 ? (
+        posts.map((post) => <PostCard post={post} />)
+      ) : (
+        <p class="listing__empty">Pierwsze artykuły z tej kategorii pojawią się już wkrótce.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .listing {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .listing__header {
+    margin-bottom: 1rem;
+    max-width: 46rem;
+  }
+
+  .listing__desc {
+    color: var(--color-fg-muted);
+    max-width: 46rem;
+  }
+
+  .listing__empty {
+    color: var(--color-fg-muted);
+    padding-block: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>

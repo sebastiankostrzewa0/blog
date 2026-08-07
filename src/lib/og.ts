@@ -4,6 +4,7 @@ import satori from 'satori';
 import { Resvg, initWasm } from '@resvg/resvg-wasm';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { SITE_TITLE } from '@/consts';
 
 // Resolved from the working directory (always the project root when Astro
 // runs) rather than import.meta.url — the latter points into a bundled
@@ -13,7 +14,15 @@ const wasmPath = join(root, 'node_modules/@resvg/resvg-wasm/index_bg.wasm');
 
 let wasmReady: Promise<void> | null = null;
 function ensureWasm() {
-  wasmReady ??= initWasm(readFileSync(wasmPath));
+  wasmReady ??= initWasm(readFileSync(wasmPath)).catch((err: unknown) => {
+    // resvg-wasm's WASM instance is a module-level singleton that survives
+    // Vite HMR reloads in `astro dev`, even though our local `wasmReady`
+    // cache gets reset on every reload — so a second init attempt throws
+    // even though the runtime is already usable. Only this specific error
+    // is safe to swallow.
+    if (err instanceof Error && err.message.includes('Already initialized')) return;
+    throw err;
+  });
   return wasmReady;
 }
 
@@ -21,27 +30,45 @@ function loadFont(pkg: string, file: string) {
   return readFileSync(join(root, `node_modules/@fontsource/${pkg}/files/${file}`));
 }
 
-const fonts = {
-  displayBlack: loadFont('big-shoulders-display', 'big-shoulders-display-latin-800-normal.woff'),
-  body: loadFont('inter', 'inter-latin-400-normal.woff'),
-  bodyBold: loadFont('inter', 'inter-latin-700-normal.woff'),
-  mono: loadFont('ibm-plex-mono', 'ibm-plex-mono-latin-500-normal.woff'),
-};
+// Google Fonts (and fontsource) ship Latin diacritics (ą, ć, ę, ł, ń, ó, ś, ź,
+// ż — all of Polish) in the separate "latin-ext" subset, not "latin". In the
+// browser that's invisible: the bundled CSS lists both @font-face rules with
+// unicode-range and the browser picks per-glyph automatically. Satori has no
+// unicode-range concept and — unlike a browser — does NOT fall back to a
+// same-name font of the same weight for a missing glyph. It does, however,
+// resolve a comma-separated `fontFamily` list the way CSS does, so each
+// weight is registered under two distinct family names ("X" / "X Ext") and
+// every style below sets `fontFamily: 'X, X Ext'`.
+function loadSubsets(pkg: string, weight: number) {
+  return {
+    base: loadFont(pkg, `${pkg}-latin-${weight}-normal.woff`),
+    ext: loadFont(pkg, `${pkg}-latin-ext-${weight}-normal.woff`),
+  };
+}
+
+const displayBlack = loadSubsets('big-shoulders-display', 900);
+const mono = loadSubsets('ibm-plex-mono', 500);
+
+const DISPLAY_STACK = 'BSDisplay, BSDisplayExt';
+const MONO_STACK = 'PlexMono, PlexMonoExt';
 
 const PAPER = '#E7E9E2';
 const INK = '#1B2A3A';
 const SIGNAL = '#D6491F';
+const GRID = '#7C8B93';
 
 interface OgOptions {
   title: string;
+  /** Small mono label top-left — category name or the site brand. */
   eyebrow?: string;
-  tags?: string[];
+  /** Shown bottom-left, small mono caps — tags or a fallback domain string. */
+  meta?: string[];
 }
 
-export async function generateOgImage({ title, eyebrow = 'MERIDIAN', tags = [] }: OgOptions) {
+export async function generateOgImage({ title, eyebrow = SITE_TITLE.toUpperCase(), meta = [] }: OgOptions) {
   await ensureWasm();
 
-  const titleSize = title.length > 70 ? 56 : title.length > 40 ? 68 : 84;
+  const titleSize = title.length > 70 ? 52 : title.length > 40 ? 64 : 80;
 
   const svg = await satori(
     {
@@ -54,8 +81,9 @@ export async function generateOgImage({ title, eyebrow = 'MERIDIAN', tags = [] }
           flexDirection: 'column',
           justifyContent: 'space-between',
           backgroundColor: PAPER,
+          backgroundImage: `linear-gradient(${GRID}22 1px, transparent 1px), linear-gradient(90deg, ${GRID}22 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
           padding: '76px',
-          fontFamily: 'Inter',
         },
         children: [
           {
@@ -79,9 +107,9 @@ export async function generateOgImage({ title, eyebrow = 'MERIDIAN', tags = [] }
                   type: 'div',
                   props: {
                     style: {
-                      fontFamily: 'IBM Plex Mono',
-                      fontSize: 26,
-                      letterSpacing: 6,
+                      fontFamily: MONO_STACK,
+                      fontSize: 24,
+                      letterSpacing: 5,
                       color: SIGNAL,
                       textTransform: 'uppercase',
                       display: 'flex',
@@ -96,8 +124,8 @@ export async function generateOgImage({ title, eyebrow = 'MERIDIAN', tags = [] }
             type: 'div',
             props: {
               style: {
-                fontFamily: 'Big Shoulders Display',
-                fontWeight: 800,
+                fontFamily: DISPLAY_STACK,
+                fontWeight: 900,
                 fontSize: titleSize,
                 lineHeight: 1.02,
                 textTransform: 'uppercase',
@@ -125,18 +153,18 @@ export async function generateOgImage({ title, eyebrow = 'MERIDIAN', tags = [] }
                     style: {
                       display: 'flex',
                       gap: '16px',
-                      fontFamily: 'IBM Plex Mono',
+                      fontFamily: MONO_STACK,
                       fontSize: 22,
                       color: '#1B2A3A99',
                       textTransform: 'uppercase',
                     },
                     children:
-                      tags.length > 0
-                        ? tags.slice(0, 4).map((tag) => ({
+                      meta.length > 0
+                        ? meta.slice(0, 4).map((item) => ({
                             type: 'div',
-                            props: { style: { display: 'flex' }, children: `#${tag}` },
+                            props: { style: { display: 'flex' }, children: `#${item}` },
                           }))
-                        : [{ type: 'div', props: { style: { display: 'flex' }, children: 'blog.example.com' } }],
+                        : [{ type: 'div', props: { style: { display: 'flex' }, children: 'raisly.pl' } }],
                   },
                 },
               ],
@@ -149,10 +177,10 @@ export async function generateOgImage({ title, eyebrow = 'MERIDIAN', tags = [] }
       width: 1200,
       height: 630,
       fonts: [
-        { name: 'Big Shoulders Display', data: fonts.displayBlack, weight: 800, style: 'normal' },
-        { name: 'Inter', data: fonts.body, weight: 400, style: 'normal' },
-        { name: 'Inter', data: fonts.bodyBold, weight: 700, style: 'normal' },
-        { name: 'IBM Plex Mono', data: fonts.mono, weight: 500, style: 'normal' },
+        { name: 'BSDisplay', data: displayBlack.base, weight: 900, style: 'normal' },
+        { name: 'BSDisplayExt', data: displayBlack.ext, weight: 900, style: 'normal' },
+        { name: 'PlexMono', data: mono.base, weight: 500, style: 'normal' },
+        { name: 'PlexMonoExt', data: mono.ext, weight: 500, style: 'normal' },
       ],
     },
   );

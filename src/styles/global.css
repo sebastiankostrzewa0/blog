@@ -2,27 +2,24 @@
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
-@import '@fontsource/inter/400-italic.css';
 @import '@fontsource/ibm-plex-mono/400.css';
 @import '@fontsource/ibm-plex-mono/500.css';
 @import '@fontsource/big-shoulders-display/700';
-@import '@fontsource/big-shoulders-display/800';
 @import '@fontsource/big-shoulders-display/900';
 
 :root {
-  /* Mockup palette */
+  /* Brand palette */
   --color-paper: #e7e9e2;
   --color-paper-dim: #dcdfd5;
   --color-ink: #1b2a3a;
-  --color-ink-soft: #48566345;
   --color-signal: #d6491f;
   --color-signal-dim: #b83c17;
+  --color-grid: #7c8b93;
 
   --color-bg: var(--color-paper);
   --color-fg: var(--color-ink);
   --color-fg-muted: #1b2a3aa8;
-  --color-border: #1b2a3a26;
+  --color-border: color-mix(in srgb, var(--color-grid) 55%, transparent);
   --color-accent: var(--color-signal);
   --color-surface: #ffffffb3;
 
@@ -94,7 +91,7 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 0.98;
   letter-spacing: 0.005em;
   text-transform: uppercase;
@@ -102,6 +99,7 @@ h4 {
 }
 
 h1 {
+  font-weight: 900;
   font-size: clamp(2.4rem, 5vw + 1rem, 4.75rem);
 }
 
@@ -115,6 +113,11 @@ h3 {
 
 p {
   margin: 0 0 1.25em;
+}
+
+strong,
+b {
+  font-weight: 600;
 }
 
 .eyebrow {
@@ -136,6 +139,19 @@ p {
   border: none;
   border-top: 1px solid var(--color-border);
   margin: 0;
+}
+
+/* Faint technical-drafting grid, used behind the homepage hero. */
+.blueprint-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-grid) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-grid) 22%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, black, transparent);
 }
 
 .btn {

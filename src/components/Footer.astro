@@ -1,5 +1,5 @@
 ---
-import { SITE_TITLE } from '@/consts';
+import { SITE_TITLE, RAISLY_URL, LINKEDIN_URL } from '@/consts';
 const year = new Date().getFullYear();
 ---
 
@@ -9,8 +9,9 @@ const year = new Date().getFullYear();
     <p class="site-footer__copy">© {year} {SITE_TITLE}. Wszystkie prawa zastrzeżone.</p>
     <nav class="site-footer__links" aria-label="Stopka">
       <a href="/rss.xml">RSS</a>
-      <a href="/blog/">Artykuły</a>
-      <a href="/about/">O blogu</a>
+      <a href="/o-mnie/">O mnie</a>
+      <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={RAISLY_URL} target="_blank" rel="noopener noreferrer">Raisly</a>
     </nav>
   </div>
 </footer>
@@ -35,6 +36,7 @@ const year = new Date().getFullYear();
 
   .site-footer__links {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
   }
 

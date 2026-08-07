@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDate } from '@/lib/format';
+import { formatDate, readingTime } from '@/lib/format';
+import CategoryBadge from '@/components/CategoryBadge.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -8,22 +9,23 @@ interface Props {
 }
 
 const { post, featured = false } = Astro.props;
-const { title, description, pubDate, tags } = post.data;
+const { title, excerpt, date, category, tags, slug } = post.data;
+const minutes = post.data.readingTime ?? readingTime(post.body ?? '');
 ---
 
 <article class:list={['post-card', { 'post-card--featured': featured }]}>
-  <a href={`/blog/${post.id}/`} class="post-card__link">
+  <a href={`/${category}/${slug}/`} class="post-card__link">
     <p class="post-card__meta">
-      <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
-      {tags.length > 0 && (
-        <>
-          <span aria-hidden="true">·</span>
-          <span>{tags.slice(0, 2).join(' / ')}</span>
-        </>
-      )}
+      <CategoryBadge category={category} asLink={false} />
+      <time datetime={date.toISOString()}>{formatDate(date)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{minutes} min czytania</span>
     </p>
     <h3 class="post-card__title">{title}</h3>
-    <p class="post-card__desc">{description}</p>
+    <p class="post-card__desc">{excerpt}</p>
+    {tags.length > 0 && (
+      <p class="post-card__tags">{tags.map((tag) => `#${tag}`).join('  ')}</p>
+    )}
     <span class="post-card__cta">Czytaj dalej →</span>
   </a>
 </article>
@@ -46,9 +48,11 @@ const { title, description, pubDate, tags } = post.data;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--color-fg-muted);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.85rem;
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
   }
 
   .post-card__title {
@@ -65,6 +69,13 @@ const { title, description, pubDate, tags } = post.data;
   .post-card__desc {
     color: var(--color-fg-muted);
     max-width: 62ch;
+    margin-bottom: 0.6rem;
+  }
+
+  .post-card__tags {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-fg-muted);
     margin-bottom: 0.75rem;
   }
 

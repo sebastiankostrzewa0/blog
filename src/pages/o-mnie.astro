@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { RAISLY_URL, LINKEDIN_URL } from '@/consts';
+---
+
+<BaseLayout
+  title="O mnie"
+  description="Sebastian Kostrzewa — founder Raisly. Buduję technologię dla branży nieruchomości i budownictwa."
+>
+  <section class="wrap about">
+    <p class="eyebrow">O mnie</p>
+    <h1>Sebastian Kostrzewa</h1>
+
+    <div class="prose">
+      <p>
+        Jestem founderem <a href={RAISLY_URL} target="_blank" rel="noopener noreferrer">Raisly</a> —
+        budujemy technologię, która pomaga firmom z branży nieruchomości i budownictwa
+        działać sprawniej: mniej arkuszy kalkulacyjnych, mniej ręcznej roboty, więcej
+        czasu na decyzje, które faktycznie mają znaczenie.
+      </p>
+      <p>
+        Wcześniej [krótka nota o doświadczeniu w nieruchomościach / budownictwie / biznesie —
+        do uzupełnienia]. Ten blog to miejsce, w którym spisuję to, czego uczę się po drodze:
+        o rynku nieruchomości, architekturze, finansowaniu inwestycji, zarządzaniu firmą
+        deweloperską czy budowlaną oraz o technologii (PropTech i ContTech), która realnie
+        zmienia tę branżę — bez marketingowego szumu.
+      </p>
+      <p>
+        Piszę głównie dla founderów, deweloperów, generalnych wykonawców i wszystkich,
+        którzy budują w tej branży firmy, a nie tylko pojedyncze projekty.
+      </p>
+      <h2>Kontakt</h2>
+      <p>
+        Najłatwiej złapać mnie na <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+        Więcej o tym, co budujemy, na stronie <a href={RAISLY_URL} target="_blank" rel="noopener noreferrer">Raisly</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-block: clamp(2.5rem, 5vw, 5rem);
+    max-width: var(--measure);
+  }
+</style>

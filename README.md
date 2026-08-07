@@ -1,74 +1,102 @@
-# Meridian — blog na Astro
+# Blog — Sebastian Kostrzewa
 
-Prosty, responsywny blog na [Astro](https://astro.build) z treścią w Markdown, zbudowany
-pod dobre SEO i design zgodny z paletą: papier `#E7E9E2`, atrament `#1B2A3A`, sygnał
-`#D6491F`, fonty Big Shoulders Display + Inter + IBM Plex Mono.
+Osobisty blog o nieruchomościach, PropTech, ContTech, architekturze i biznesie.
+Zbudowany na [Astro](https://astro.build): treść to pliki Markdown w repo, bez CMS-a
+i bez panelu admina.
 
-## Start
+## Szybki start
 
 ```bash
 npm install
-npm run dev       # http://localhost:4321
-npm run build     # typecheck + build statyczny do dist/
-npm run preview   # podgląd builda produkcyjnego
+npm run dev       # http://localhost:4321 — pokazuje też posty z draft: true
+npm run build     # typecheck + build statyczny do dist/ (drafty pominięte)
+npm run preview   # podgląd builda produkcyjnego z dist/
 ```
+
+## Jak dodać nowy post
+
+1. Stwórz plik `.md` w `src/content/blog/`, np. `src/content/blog/moj-nowy-post.md`.
+2. Uzupełnij frontmatter:
+
+   ```yaml
+   ---
+   title: "Tytuł artykułu"
+   slug: "tytul-artykulu"          # trafia do URL-a: /<category>/<slug>/
+   date: 2026-08-13
+   category: "biznes"               # nieruchomosci | architektura | biznes | proptech | conttech
+   tags: ["SPV", "cashflow"]        # 0-4 tagi, trafiają na strony /tag/<tag>/
+   excerpt: "Jedno-dwa zdania streszczenia — widoczne na liście i w meta description."
+   author: "Sebastian"
+   draft: true                      # true = widoczny tylko w `npm run dev`
+   ---
+   ```
+
+3. Napisz treść w Markdown pod frontmatterem.
+4. Dopóki `draft: true`, post jest widoczny lokalnie (`npm run dev`), ale **nie**
+   trafia do builda produkcyjnego — nie ma go w żadnej liście, w sitemapie ani w RSS,
+   więc nic niedopracowanego nie zostanie zaindeksowane. Gdy artykuł jest gotowy,
+   zmień na `draft: false`.
+5. Czas czytania liczy się automatycznie z liczby słów — nie trzeba go wpisywać
+   ręcznie (frontmatter dopuszcza opcjonalne pole `readingTime`, gdybyś kiedyś
+   chciał nadpisać wyliczoną wartość).
+6. Kategorię trzeba wybrać z zamkniętej listy pięciu wartości zdefiniowanej w
+   `src/lib/categories.ts` — tam też zmienisz etykiety lub opisy kategorii,
+   gdyby się okazały niedoszlifowane.
+
+Filename pliku `.md` nie ma znaczenia dla URL-a — o adresie decyduje `slug` we
+frontmatterze, więc możesz swobodnie zmieniać/organizować nazwy plików w repo.
+
+## Struktura strony
+
+- `/` — hero + najnowszy artykuł wyróżniony + reszta.
+- `/<kategoria>/` — lista artykułów z danej kategorii (5 kategorii na stałe w nawigacji).
+- `/<kategoria>/<slug>/` — pojedynczy artykuł, na końcu 2-3 powiązane (ta sama kategoria).
+- `/tag/<tag>/` — lista artykułów z danym tagiem.
+- `/o-mnie/` — bio, link do Raisly i LinkedIn.
+- `/rss.xml`, `/sitemap-index.xml`, `/robots.txt` — generowane automatycznie.
 
 ## Zanim wdrożysz na produkcję
 
-1. **Ustaw domenę** — w `astro.config.mjs` zmień `SITE_URL` na docelowy adres. Wpływa on
-   na canonical URL-e, sitemapę, RSS i adresy obrazków OG.
-2. Podmień `SITE_AUTHOR` / `SITE_TITLE` / `SITE_DESCRIPTION` w `src/consts.ts`, jeśli
-   chcesz innej nazwy niż „Meridian”.
+1. **Domena** — w `astro.config.mjs` zmień `SITE_URL` (obecnie placeholder) na
+   docelowy adres. Wpływa na canonical URL-e, sitemapę, RSS i linki OG.
+2. **Linki społecznościowe** — w `src/consts.ts` podmień `RAISLY_URL` i
+   `LINKEDIN_URL` na prawdziwe adresy (oznaczone `// TODO`).
+3. **Strona „O mnie”** (`src/pages/o-mnie.astro`) zawiera fragment `[do
+   uzupełnienia]` w bio — dopisz realną notę o doświadczeniu.
+4. **Alt text obrazków** — jeśli dodajesz zdjęcia do treści postów, zawsze
+   dopisz opisowy `alt`, np. `![Wykres cen mieszkań w Warszawie 2020-2026](...)`
+   zamiast pustego atrybutu.
 
-## Struktura treści
+## SEO / GEO
 
-Artykuły to pliki Markdown w `src/content/blog/*.md`, walidowane schematem Zod
-(`src/content.config.ts`):
-
-```md
----
-title: "Tytuł artykułu"
-description: "Krótki opis (do 200 znaków) — trafia w meta description i OG."
-pubDate: 2026-01-12
-updatedDate: 2026-02-01   # opcjonalnie
-tags: ["tag-jeden", "tag-dwa"]
-draft: false               # true = nie trafia do builda
----
-
-Treść w Markdown...
-```
-
-Nowy plik w tym katalogu = nowy wpis, automatycznie widoczny w `/blog/`, w RSS,
-w sitemapie i na stronach tagów `/tags/<tag>/`.
-
-## SEO wbudowane w projekt
-
-- **Meta tagi** — tytuł, opis, canonical URL, `robots` — generowane przez
-  `src/components/SEO.astro` dla każdej strony.
-- **Open Graph + Twitter Card** — pełny zestaw tagów (`og:*`, `twitter:*`).
-- **Dynamiczne obrazki OG** (1200×630) — generowane w czasie builda dla każdego wpisu
-  (`src/pages/og/[...slug].png.ts`) i jednej domyślnej (`/og/default.png`), w stylu
-  zgodnym z paletą i typografią bloga. Silnik: `satori` + `@resvg/resvg-wasm` — bez
-  natywnych zależności (żadnego `sharp`/`cairo`), więc build działa wszędzie tam, gdzie
-  działa Node.
-- **JSON-LD** — `BlogPosting` dla wpisów, `WebSite` dla reszty stron.
-- **Sitemap** — `@astrojs/sitemap`, generowana automatycznie przy buildzie
-  (`/sitemap-index.xml`).
-- **RSS** — `/rss.xml` (`@astrojs/rss`).
-- **`robots.txt`** — generowany dynamicznie (`src/pages/robots.txt.ts`), zawsze wskazuje
-  na aktualną sitemapę.
+- Meta title + description per strona, generowane z frontmattera (`src/components/SEO.astro`).
+- Open Graph + Twitter Card, w tym obrazek OG 1200×630 generowany automatycznie
+  dla każdego artykułu w czasie builda (`src/lib/og.ts`, satori + resvg-wasm —
+  bez `sharp`, bez natywnych zależności) — nakłada tytuł i kategorię na grafikę
+  w stylu bloga, nic nie trzeba przygotowywać ręcznie.
+- Schema.org `Article` (JSON-LD) z `author`, `datePublished`, `headline` na
+  każdym artykule; `WebSite` na pozostałych stronach.
+- Czytelne URL-e: `/biznes/jak-rozliczyc-transze-bankowa/`, żadnych `?id=`.
+- Jeden `<h1>` na stronę, hierarchia H1→H2→H3 w treści Markdown.
 
 ## Design
 
-Wszystkie tokeny kolorów i fontów są w `src/styles/global.css` (custom properties
-`--color-*`, `--font-*`). Fonty są self-hosted przez `@fontsource` (brak zewnętrznych
-requestów do Google Fonts — lepszy performance i prywatność).
+Paleta i fonty jako custom properties w `src/styles/global.css`:
 
-- **Big Shoulders Display** (800/900) — nagłówki, wersaliki.
-- **Inter** — tekst.
-- **IBM Plex Mono** — metadane, tagi, elementy techniczne.
+- Papier `#E7E9E2`, atrament `#1B2A3A`, sygnał `#D6491F`, siatka `#7C8B93`.
+- Nagłówki: Big Shoulders Display (700/900). Tekst: Inter (400/500/600).
+  Metadane/tagi/daty: IBM Plex Mono (400/500) — wszystko self-hosted przez
+  `@fontsource`, zero requestów do Google Fonts.
+- Delikatna siatka blueprintu w tle hero (`.blueprint-grid` w `global.css`).
+- Kategorie jako małe mono-labelki (`CategoryBadge.astro`).
+- Menu mobilne to czysty CSS (`<details>/<summary>`) — działa bez JavaScriptu.
 
-Menu mobilne jest czystym CSS (`<details>/<summary>`) — działa bez JavaScriptu.
+## Deploy (Vercel)
+
+Build jest w pełni statyczny (`output: "static"` w `astro.config.mjs`) — Vercel
+wykrywa Astro automatycznie, `vercel.json` w repo tylko to potwierdza jawnie
+(`buildCommand: npm run build`, `outputDirectory: dist`). Wystarczy podłączyć
+repo w Vercelu; nie jest potrzebny żaden adapter ani zmienne środowiskowe.
 
 ## Regeneracja ikon
 
@@ -77,3 +105,9 @@ Jeśli zmienisz `public/favicon.svg`, przelicz PNG-i:
 ```bash
 node scripts/gen-icons.mjs
 ```
+
+## Czego tu celowo nie ma
+
+Zgodnie z założeniami: brak CMS-a i panelu admina (posty edytuje się jako
+pliki `.md`), brak newslettera/zapisu i brak systemu komentarzy — to osobne
+etapy na później.
