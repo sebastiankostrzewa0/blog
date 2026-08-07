@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import CategoryTabs from '@/components/CategoryTabs.astro';
+import { getCollection } from 'astro:content';
+import { isPublished } from '@/lib/publishing';
+
+const posts = (await getCollection('blog', isPublished)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout
+  title="Blog"
+  description="Wszystkie artykuły — o nieruchomościach, prawie, danych i designie."
+>
+  <section class="wrap listing">
+    <header class="listing__header">
+      <p class="eyebrow">Wszystkie artykuły</p>
+      <h1>Blog</h1>
+    </header>
+    <CategoryTabs />
+    <div class="listing__list">
+      {posts.length > 0 ? (
+        posts.map((post) => <PostCard post={post} />)
+      ) : (
+        <p class="listing__empty">Pierwsze artykuły pojawią się już wkrótce.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .listing {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .listing__header {
+    margin-bottom: 1.5rem;
+    max-width: 46rem;
+  }
+
+  .listing__empty {
+    color: var(--color-fg-muted);
+    padding-block: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>

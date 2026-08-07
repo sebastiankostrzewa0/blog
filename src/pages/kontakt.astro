@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { CONTACT_EMAIL, LINKEDIN_URL } from '@/consts';
+---
+
+<BaseLayout
+  title="Kontakt"
+  description="Napisz do mnie mailem albo złap na LinkedIn."
+>
+  <section class="wrap contact">
+    <p class="eyebrow">Kontakt</p>
+    <h1>Napisz.</h1>
+    <p class="contact__lede">
+      Najprościej mailem albo na LinkedIn — odpowiadam na jedno i drugie.
+    </p>
+
+    <div class="contact__links">
+      <a href={`mailto:${CONTACT_EMAIL}`} class="btn btn--accent">{CONTACT_EMAIL}</a>
+      <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="btn">LinkedIn →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    padding-block: clamp(3rem, 7vw, 6rem);
+    max-width: var(--measure);
+  }
+
+  .contact__lede {
+    color: var(--color-fg-muted);
+    font-size: 1.1rem;
+    max-width: 36rem;
+  }
+
+  .contact__links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+</style>

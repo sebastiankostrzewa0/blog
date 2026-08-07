@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
+import CategoryTabs from '@/components/CategoryTabs.astro';
 import { CATEGORIES } from '@/lib/categories';
 import { isPublished } from '@/lib/publishing';
 
@@ -29,6 +30,7 @@ const { meta, posts } = Astro.props;
       <h1>{meta.label}</h1>
       <p class="listing__desc">{meta.description}</p>
     </header>
+    <CategoryTabs active={meta.slug} />
     <div class="listing__list">
       {posts.length > 0 ? (
         posts.map((post) => <PostCard post={post} />)

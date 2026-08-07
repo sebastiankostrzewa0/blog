@@ -48,21 +48,27 @@ frontmatterze, więc możesz swobodnie zmieniać/organizować nazwy plików w re
 
 ## Struktura strony
 
-- `/` — hero + najnowszy artykuł wyróżniony + reszta.
-- `/<kategoria>/` — lista artykułów z danej kategorii (5 kategorii na stałe w nawigacji).
+- `/` — hero dwukolumnowy: intro po lewej, 3-4 najnowsze artykuły (skrótowo,
+  bez excerptów) po prawej.
+- `/blog/` — pełna lista wszystkich artykułów, z zakładkami kategorii u góry.
+- `/<kategoria>/` — ta sama lista, przefiltrowana do jednej kategorii (zakładki
+  na `/blog/` i na stronach kategorii to jeden spójny mechanizm filtrowania —
+  5 kategorii zdefiniowanych w `src/lib/categories.ts`, poza głównym navbarem).
 - `/<kategoria>/<slug>/` — pojedynczy artykuł, na końcu 2-3 powiązane (ta sama kategoria).
 - `/tag/<tag>/` — lista artykułów z danym tagiem.
 - `/o-mnie/` — bio, link do Raisly i LinkedIn.
+- `/kontakt/` — link `mailto:` i LinkedIn, bez formularza/backendu.
 - `/rss.xml`, `/sitemap-index.xml`, `/robots.txt` — generowane automatycznie.
+
+Nawigacja główna to tylko trzy pozycje: Blog / O mnie / Kontakt
+(`src/consts.ts` → `NAV_LINKS`).
 
 ## Zanim wdrożysz na produkcję
 
 1. **Domena** — w `astro.config.mjs` zmień `SITE_URL` (obecnie placeholder) na
    docelowy adres. Wpływa na canonical URL-e, sitemapę, RSS i linki OG.
-2. **Linki społecznościowe** — w `src/consts.ts` podmień `RAISLY_URL` i
-   `LINKEDIN_URL` na prawdziwe adresy (oznaczone `// TODO`).
-3. **Strona „O mnie”** (`src/pages/o-mnie.astro`) zawiera fragment `[do
-   uzupełnienia]` w bio — dopisz realną notę o doświadczeniu.
+2. **Kontakt i social** — w `src/consts.ts` podmień `RAISLY_URL`,
+   `LINKEDIN_URL` i `CONTACT_EMAIL` na prawdziwe adresy (oznaczone `// TODO`).
 4. **Alt text obrazków** — jeśli dodajesz zdjęcia do treści postów, zawsze
    dopisz opisowy `alt`, np. `![Wykres cen mieszkań w Warszawie 2020-2026](...)`
    zamiast pustego atrybutu.

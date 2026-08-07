@@ -1,65 +1,59 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import PostCard from '@/components/PostCard.astro';
+import CompactPostList from '@/components/CompactPostList.astro';
 import { getCollection } from 'astro:content';
 import { isPublished } from '@/lib/publishing';
-import { RAISLY_URL } from '@/consts';
 
 const posts = (await getCollection('blog', isPublished)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-const [featured, ...rest] = posts;
+const latest = posts.slice(0, 4);
 ---
 
 <BaseLayout>
   <section class="hero">
     <div class="blueprint-grid"></div>
-    <div class="wrap hero__inner">
-      <p class="eyebrow">Nieruchomości · PropTech · Biznes</p>
-      <h1>Buduję firmy<br />i piszę o tym, co działa.</h1>
-      <p class="hero__lede">
-        Cześć, jestem Sebastian — founder <a href={RAISLY_URL} target="_blank" rel="noopener noreferrer">Raisly</a>,
-        gdzie pomagamy firmom z branży nieruchomości i budownictwa działać sprawniej dzięki
-        technologii. Ten blog to zapis tego, czego uczę się po drodze: o rynku, architekturze,
-        finansowaniu inwestycji i technologii, która realnie zmienia tę branżę.
-      </p>
-      <div class="hero__actions">
-        <a href="/biznes/" class="btn btn--accent">Czytaj artykuły</a>
-        <a href="/rss.xml" class="btn">RSS</a>
+    <div class="wrap hero__grid">
+      <div class="hero__main">
+        <p class="eyebrow">Nieruchomości · Prawo · Dane · Design</p>
+        <h1>Piszę o nieruchomościach bez lukru.</h1>
+        <p class="hero__lede">
+          Cześć, jestem Sebastian. Na co dzień pracuję jako PM w firmie deweloperskiej —
+          widzę różnicę między tym, co idzie do marketingu, a tym, co faktycznie ląduje
+          w umowie i na budowie. Piszę o rynku, zmianach w prawie, danych i designie
+          w nieruchomościach — czasem wygodnie dla branży, czasem nie.
+        </p>
+        <div class="hero__actions">
+          <a href="/blog/" class="btn btn--accent">Czytaj artykuły</a>
+          <a href="/rss.xml" class="btn">RSS</a>
+        </div>
       </div>
+
+      {latest.length > 0 && (
+        <aside class="hero__aside" aria-label="Najnowsze artykuły">
+          <p class="section-label">Najnowsze</p>
+          <CompactPostList posts={latest} />
+        </aside>
+      )}
     </div>
   </section>
-
-  {featured && (
-    <section class="wrap featured">
-      <p class="section-label">Najnowszy</p>
-      <PostCard post={featured} featured />
-    </section>
-  )}
-
-  {rest.length > 0 && (
-    <section class="wrap archive">
-      <p class="section-label">Pozostałe artykuły</p>
-      <div class="archive__list">
-        {rest.map((post) => <PostCard post={post} />)}
-      </div>
-    </section>
-  )}
 </BaseLayout>
 
 <style>
   .hero {
     position: relative;
     overflow: hidden;
-    border-bottom: 1px solid var(--color-border);
   }
 
-  .hero__inner {
+  .hero__grid {
     position: relative;
     z-index: 1;
-    padding-block: clamp(3rem, 8vw, 7rem) clamp(2.5rem, 6vw, 5rem);
-    max-width: 60rem;
+    padding-block: clamp(3rem, 7vw, 6rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
   }
 
   .hero h1 {
@@ -67,15 +61,8 @@ const [featured, ...rest] = posts;
   }
 
   .hero__lede {
-    max-width: 46rem;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     color: var(--color-fg-muted);
-  }
-
-  .hero__lede a {
-    color: var(--color-signal);
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 3px;
   }
 
   .hero__actions {
@@ -85,22 +72,24 @@ const [featured, ...rest] = posts;
     flex-wrap: wrap;
   }
 
+  .hero__aside {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding: 1.5rem;
+  }
+
   .section-label {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-fg-muted);
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 0.75rem;
-    margin-bottom: 0;
+    margin: 0 0 0.25rem;
   }
 
-  .featured {
-    padding-block: clamp(2rem, 4vw, 3rem) 1rem;
-  }
-
-  .archive {
-    padding-block: 1rem clamp(3rem, 6vw, 5rem);
+  @media (max-width: 56rem) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

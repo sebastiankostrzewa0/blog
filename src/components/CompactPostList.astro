@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, readingTime } from '@/lib/format';
+import { getCategoryMeta } from '@/lib/categories';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="compact-list">
+  {posts.map((post) => {
+    const { title, date, category, slug } = post.data;
+    const minutes = post.data.readingTime ?? readingTime(post.body ?? '');
+    const label = getCategoryMeta(category)?.label ?? category;
+    return (
+      <li class="compact-list__item">
+        <p class="compact-list__category">{label}</p>
+        <a href={`/${category}/${slug}/`} class="compact-list__title">{title}</a>
+        <p class="compact-list__meta">
+          <time datetime={date.toISOString()}>{formatDate(date)}</time>
+          <span aria-hidden="true">·</span>
+          <span>{minutes} min czytania</span>
+        </p>
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .compact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .compact-list__item {
+    padding-block: 1.1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .compact-list__item:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .compact-list__category {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-signal);
+    margin: 0 0 0.35rem;
+  }
+
+  .compact-list__title {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.05rem;
+    line-height: 1.15;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .compact-list__title:hover,
+  .compact-list__title:focus-visible {
+    color: var(--color-signal);
+  }
+
+  .compact-list__meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    color: var(--color-fg-muted);
+    margin: 0.4rem 0 0;
+    display: flex;
+    gap: 0.4rem;
+  }
+</style>
