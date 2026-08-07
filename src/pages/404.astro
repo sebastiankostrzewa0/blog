@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Nie znaleziono strony" noindex>
+  <section class="wrap not-found">
+    <p class="eyebrow">404</p>
+    <h1>Ta strona zgubiła się w archiwum.</h1>
+    <p>Link mógł wygasnąć albo strona nigdy nie istniała.</p>
+    <a href="/" class="btn btn--accent">Wróć na start</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding-block: clamp(4rem, 12vw, 8rem);
+    max-width: 40rem;
+  }
+
+  .not-found p:not(.eyebrow) {
+    color: var(--color-fg-muted);
+    margin-bottom: 2rem;
+  }
+</style>

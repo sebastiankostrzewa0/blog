@@ -1,0 +1,101 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { formatDate, readingTime, slugifyTag } from '@/lib/format';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, author } = post.data;
+const minutes = readingTime(post.body ?? '');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={`/og/${post.id}.png`}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  tags={tags}
+>
+  <article class="wrap post">
+    <header class="post__header">
+      <p class="eyebrow">{tags[0] ?? 'Artykuł'}</p>
+      <h1>{title}</h1>
+      <p class="post__meta">
+        <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{minutes} min czytania</span>
+        <span aria-hidden="true">·</span>
+        <span>{author}</span>
+      </p>
+      {updatedDate && (
+        <p class="post__updated">Zaktualizowano {formatDate(updatedDate)}</p>
+      )}
+    </header>
+
+    <hr class="hairline post__rule" />
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {tags.length > 0 && (
+      <footer class="post__tags">
+        {tags.map((tag) => (
+          <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>#{tag}</a>
+        ))}
+      </footer>
+    )}
+
+    <nav class="post__back">
+      <a href="/blog/" class="btn">← Wszystkie artykuły</a>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-block: clamp(2.5rem, 5vw, 5rem);
+  }
+
+  .post__header {
+    max-width: var(--measure);
+  }
+
+  .post__meta,
+  .post__updated {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    display: flex;
+    gap: 0.6rem;
+    margin: 0.75rem 0 0;
+  }
+
+  .post__updated {
+    margin-top: 0.35rem;
+    color: var(--color-signal);
+  }
+
+  .post__rule {
+    margin: 2.25rem 0;
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 3rem;
+  }
+
+  .post__back {
+    margin-top: 3rem;
+  }
+</style>

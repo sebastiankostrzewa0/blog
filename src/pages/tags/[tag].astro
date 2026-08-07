@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { slugifyTag } from '@/lib/format';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const tagMap = new Map<string, { label: string; posts: typeof posts }>();
+
+  for (const post of posts) {
+    for (const tag of post.data.tags) {
+      const slug = slugifyTag(tag);
+      const entry = tagMap.get(slug) ?? { label: tag, posts: [] };
+      entry.posts.push(post);
+      tagMap.set(slug, entry);
+    }
+  }
+
+  return Array.from(tagMap.entries()).map(([tag, { label, posts: tagPosts }]) => ({
+    params: { tag },
+    props: {
+      label,
+      posts: tagPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { label, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`#${label}`}
+  description={`Artykuły oznaczone tagiem ${label} na Meridian.`}
+>
+  <section class="wrap listing">
+    <header class="listing__header">
+      <p class="eyebrow">Tag</p>
+      <h1>#{label}</h1>
+    </header>
+    <div class="listing__list">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .listing {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .listing__header {
+    margin-bottom: 1rem;
+  }
+</style>

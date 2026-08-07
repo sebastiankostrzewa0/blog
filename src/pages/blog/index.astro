@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<BaseLayout
+  title="Artykuły"
+  description="Wszystkie artykuły Meridian — o pisaniu, projektowaniu i budowaniu rzeczy na lata."
+>
+  <section class="wrap listing">
+    <header class="listing__header">
+      <p class="eyebrow">Archiwum</p>
+      <h1>Artykuły</h1>
+    </header>
+    <div class="listing__list">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .listing {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .listing__header {
+    margin-bottom: 1rem;
+    max-width: 46rem;
+  }
+</style>
