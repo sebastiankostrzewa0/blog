@@ -15,7 +15,7 @@ const blog = defineCollection({
     tags: z.array(z.string()).max(4).default([]),
     excerpt: z.string().max(220),
     author: z.string().default('Sebastian'),
-    // Optional manual override — by default reading time is computed from the
+    // Optional manual override - by default reading time is computed from the
     // post's word count at render time (see src/lib/format.ts#readingTime).
     readingTime: z.number().int().positive().optional(),
     draft: z.boolean().default(false),

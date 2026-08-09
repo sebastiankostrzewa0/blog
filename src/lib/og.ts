@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { SITE_TITLE } from '@/consts';
 
 // Resolved from the working directory (always the project root when Astro
-// runs) rather than import.meta.url — the latter points into a bundled
+// runs) rather than import.meta.url - the latter points into a bundled
 // dist/.prerender chunk at build time, which breaks relative lookups.
 const root = process.cwd();
 const wasmPath = join(root, 'node_modules/@resvg/resvg-wasm/index_bg.wasm');
@@ -17,7 +17,7 @@ function ensureWasm() {
   wasmReady ??= initWasm(readFileSync(wasmPath)).catch((err: unknown) => {
     // resvg-wasm's WASM instance is a module-level singleton that survives
     // Vite HMR reloads in `astro dev`, even though our local `wasmReady`
-    // cache gets reset on every reload — so a second init attempt throws
+    // cache gets reset on every reload - so a second init attempt throws
     // even though the runtime is already usable. Only this specific error
     // is safe to swallow.
     if (err instanceof Error && err.message.includes('Already initialized')) return;
@@ -31,10 +31,10 @@ function loadFont(pkg: string, file: string) {
 }
 
 // Google Fonts (and fontsource) ship Latin diacritics (ą, ć, ę, ł, ń, ó, ś, ź,
-// ż — all of Polish) in the separate "latin-ext" subset, not "latin". In the
+// ż - all of Polish) in the separate "latin-ext" subset, not "latin". In the
 // browser that's invisible: the bundled CSS lists both @font-face rules with
 // unicode-range and the browser picks per-glyph automatically. Satori has no
-// unicode-range concept and — unlike a browser — does NOT fall back to a
+// unicode-range concept and - unlike a browser - does NOT fall back to a
 // same-name font of the same weight for a missing glyph. It does, however,
 // resolve a comma-separated `fontFamily` list the way CSS does, so each
 // weight is registered under two distinct family names ("X" / "X Ext") and
@@ -59,9 +59,9 @@ const GRID = '#7C8B93';
 
 interface OgOptions {
   title: string;
-  /** Small mono label top-left — category name or the site brand. */
+  /** Small mono label top-left - category name or the site brand. */
   eyebrow?: string;
-  /** Shown bottom-left, small mono caps — tags or a fallback domain string. */
+  /** Shown bottom-left, small mono caps - tags or a fallback domain string. */
   meta?: string[];
 }
 

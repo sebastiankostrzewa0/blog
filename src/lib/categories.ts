@@ -11,7 +11,7 @@ export const CATEGORIES: readonly CategoryMeta[] = [
   {
     slug: 'analizy',
     label: 'Analizy',
-    description: 'Rynek mieszkaniowy w liczbach — dane, trendy, struktury inwestycyjne i to, co za nimi stoi.',
+    description: 'Rynek mieszkaniowy w liczbach - dane, trendy, struktury inwestycyjne i to, co za nimi stoi.',
   },
   {
     slug: 'prawo',

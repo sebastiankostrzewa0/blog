@@ -2,7 +2,7 @@
 export const SITE_TITLE = 'Sebastian Kostrzewa';
 export const SITE_TAGLINE = 'Nieruchomości bez lukru';
 export const SITE_DESCRIPTION =
-  'Blog Sebastiana Kostrzewy — o rynku nieruchomości, prawie, danych i designie, widzianym od środka branży, nie z prezentacji dla zarządu.';
+  'Blog Sebastiana Kostrzewy - o rynku nieruchomości, prawie, danych i designie, widzianym od środka branży, nie z prezentacji dla zarządu.';
 export const SITE_LOCALE = 'pl-PL';
 export const SITE_AUTHOR = 'Sebastian';
 

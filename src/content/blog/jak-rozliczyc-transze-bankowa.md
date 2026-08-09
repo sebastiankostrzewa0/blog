@@ -1,10 +1,10 @@
 ---
-title: "Jak rozliczyć transzę bankową bez błędów — checklist dla dewelopera"
+title: "Jak rozliczyć transzę bankową bez błędów - checklist dla dewelopera"
 slug: "jak-rozliczyc-transze-bankowa"
 date: 2026-07-22
 category: "prawo"
 tags: ["transza bankowa", "cashflow", "bank"]
-excerpt: "Rozliczenie transzy to nie formalność na koniec miesiąca — to moment, w którym najczęściej wychodzą błędy zebrane po drodze. Checklist, który je łapie wcześniej."
+excerpt: "Rozliczenie transzy to nie formalność na koniec miesiąca - to moment, w którym najczęściej wychodzą błędy zebrane po drodze. Checklist, który je łapie wcześniej."
 author: "Sebastian"
 draft: true
 ---
@@ -13,7 +13,7 @@ Rozliczenie transzy bankowej w kredycie deweloperskim wygląda prosto na papierz
 
 ## Gdzie najczęściej wychodzą błędy
 
-Bank porównuje wniosek z trzema rzeczami naraz: kosztorysem, harmonogramem rzeczowo-finansowym i raportem inspektora nadzoru bankowego. Jeśli faktura dotyczy zakresu, który w harmonogramie jest przypisany do innego etapu, albo procent zaawansowania z raportu inspektora nie zgadza się z tym, co pokazujesz we wniosku — transza wraca do poprawy.
+Bank porównuje wniosek z trzema rzeczami naraz: kosztorysem, harmonogramem rzeczowo-finansowym i raportem inspektora nadzoru bankowego. Jeśli faktura dotyczy zakresu, który w harmonogramie jest przypisany do innego etapu, albo procent zaawansowania z raportu inspektora nie zgadza się z tym, co pokazujesz we wniosku - transza wraca do poprawy.
 
 Drugi częsty problem to faktury zaliczkowe i częściowe, które nie są jasno powiązane z konkretnym elementem robót. Bank chce widzieć wprost, za co płaci, a nie musieć się tego domyślać.
 
