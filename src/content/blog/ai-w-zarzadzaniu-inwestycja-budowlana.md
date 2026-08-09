@@ -2,7 +2,7 @@
 title: "AI w zarządzaniu inwestycją budowlaną — co realnie działa, a co to marketing"
 slug: "ai-w-zarzadzaniu-inwestycja-budowlana"
 date: 2026-06-30
-category: "proptech"
+category: "technologia"
 tags: ["AI", "zarządzanie projektem"]
 excerpt: "Na każdej konferencji PropTech ktoś pokazuje slajd z AI, które \"zrewolucjonizuje budownictwo\". Rzeczywistość na placu budowy wygląda inaczej — i to wcale nie jest złe."
 author: "Sebastian"

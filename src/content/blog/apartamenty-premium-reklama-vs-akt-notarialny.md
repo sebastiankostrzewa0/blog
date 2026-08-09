@@ -1,8 +1,8 @@
 ---
 title: "Dlaczego 'apartamenty premium' w reklamie i w akcie notarialnym to często dwa różne produkty"
 slug: "apartamenty-premium-reklama-vs-akt-notarialny"
-date: 2026-08-17
-category: "kontrowersje"
+date: 2026-08-05
+category: "analizy"
 tags: ["premium", "marketing deweloperski", "standard wykończenia"]
 excerpt: "Słowo 'premium' nie jest w Polsce niczym prawnie zdefiniowane. To dlatego w reklamie i w umowie deweloperskiej możesz kupić dwa różne mieszkania pod tą samą nazwą."
 author: "Sebastian"

@@ -6,10 +6,10 @@ export const SITE_DESCRIPTION =
 export const SITE_LOCALE = 'pl-PL';
 export const SITE_AUTHOR = 'Sebastian';
 
-// TODO: podmień na docelowe adresy przed publikacją.
+// TODO: podmień RAISLY_URL na docelowy adres przed publikacją.
 export const RAISLY_URL = 'https://raisly.pl';
-export const LINKEDIN_URL = 'https://www.linkedin.com/in/sebastiankostrzewa';
-export const CONTACT_EMAIL = 'sebastian@raisly.pl';
+export const LINKEDIN_URL = 'https://www.linkedin.com/in/sebastian-kostrzewa-33b705260/?skipRedirect=true';
+export const CONTACT_EMAIL = 'sebastiankostrzewa0@gmail.com';
 
 export const NAV_LINKS = [
   { href: '/blog/', label: 'Blog' },

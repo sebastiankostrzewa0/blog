@@ -2,7 +2,7 @@
 title: "Dlaczego Excel to najdroższe narzędzie do zarządzania budżetem budowy"
 slug: "excel-najdrozsze-narzedzie-budzet-budowy"
 date: 2026-08-10
-category: "biznes"
+category: "technologia"
 tags: ["cashflow", "budżet budowy"]
 excerpt: "Excel jest darmowy w licencji i kosztowny we wszystkim innym — w błędach, w czasie i w decyzjach podjętych na złych danych."
 author: "Sebastian"

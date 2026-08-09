@@ -9,8 +9,7 @@ const isActive = (href: string) =>
 <header class="site-header">
   <div class="wrap site-header__inner">
     <a href="/" class="brand">
-      <span class="brand__mark" aria-hidden="true"></span>
-      <span class="brand__name">Kostrzewa</span>
+      <span class="brand__name">Sebastian Kostrzewa</span>
     </a>
 
     <details class="mobile-nav">
@@ -61,48 +60,19 @@ const isActive = (href: string) =>
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
     text-decoration: none;
     color: var(--color-ink);
     flex: none;
-  }
-
-  .brand__mark {
-    width: 1.6rem;
-    height: 1.6rem;
-    background: var(--color-ink);
-    position: relative;
-    flex: none;
-  }
-
-  .brand__mark::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: 0.85rem;
-    height: 2px;
-    background: var(--color-paper);
-  }
-
-  .brand__mark::before {
-    content: '';
-    position: absolute;
-    right: 0.2rem;
-    top: 50%;
-    translate: 0 -50%;
-    width: 0.3rem;
-    height: 0.3rem;
-    border-radius: 50%;
-    background: var(--color-signal);
   }
 
   .brand__name {
     font-family: var(--font-display);
     font-weight: 900;
     text-transform: uppercase;
-    font-size: 1.35rem;
-    letter-spacing: 0.02em;
+    font-size: 1.15rem;
+    letter-spacing: 0.01em;
+    color: #1b2a3a;
+    white-space: nowrap;
   }
 
   .site-nav {

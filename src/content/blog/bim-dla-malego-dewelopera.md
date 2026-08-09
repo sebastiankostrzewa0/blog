@@ -2,7 +2,7 @@
 title: "BIM dla małego dewelopera — czy to ma sens przy 2-5 inwestycjach rocznie"
 slug: "bim-dla-malego-dewelopera"
 date: 2026-04-14
-category: "conttech"
+category: "technologia"
 tags: ["BIM", "generalny wykonawca"]
 excerpt: "BIM kojarzy się z dużymi generalnymi wykonawcami i inwestycjami infrastrukturalnymi. Pytanie, czy opłaca się małemu deweloperowi, jest bardziej praktyczne niż ideologiczne."
 author: "Sebastian"

@@ -2,7 +2,7 @@
 title: "Jak dobry projekt architektoniczny obniża koszty budowy o kilkanaście procent"
 slug: "dobry-projekt-architektoniczny-obniza-koszty"
 date: 2026-05-18
-category: "architektura"
+category: "design"
 tags: ["projekt architektoniczny", "koszty budowy"]
 excerpt: "Oszczędzanie na etapie projektu, żeby zaoszczędzić na kosztach, to jeden z najdroższych błędów w tej branży. Dobry projekt kosztuje więcej na starcie i mniej na końcu."
 author: "Sebastian"

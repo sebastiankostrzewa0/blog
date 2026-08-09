@@ -1,8 +1,8 @@
 ---
 title: "Pozwolenia na budowę a faktycznie oddane mieszkania — co pokazują dane GUS"
 slug: "pozwolenia-na-budowe-a-oddane-mieszkania-dane-gus"
-date: 2026-08-10
-category: "dane"
+date: 2026-07-29
+category: "analizy"
 tags: ["GUS", "dane.gov.pl", "rynek mieszkaniowy"]
 excerpt: "Liczba pozwoleń na budowę mówi Ci, co deweloper planuje. Liczba oddanych mieszkań mówi, co faktycznie dowiózł. Rozjazd między tymi liczbami to najlepszy wskaźnik tego, co czeka rynek za dwa-trzy lata."
 author: "Sebastian"

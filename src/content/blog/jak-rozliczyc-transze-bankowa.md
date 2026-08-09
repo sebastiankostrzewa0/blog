@@ -2,7 +2,7 @@
 title: "Jak rozliczyć transzę bankową bez błędów — checklist dla dewelopera"
 slug: "jak-rozliczyc-transze-bankowa"
 date: 2026-07-22
-category: "biznes"
+category: "prawo"
 tags: ["transza bankowa", "cashflow", "bank"]
 excerpt: "Rozliczenie transzy to nie formalność na koniec miesiąca — to moment, w którym najczęściej wychodzą błędy zebrane po drodze. Checklist, który je łapie wcześniej."
 author: "Sebastian"

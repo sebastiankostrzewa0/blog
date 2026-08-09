@@ -1,8 +1,8 @@
 # Blog — Sebastian Kostrzewa
 
-Osobisty blog o nieruchomościach, PropTech, ContTech, architekturze i biznesie.
-Zbudowany na [Astro](https://astro.build): treść to pliki Markdown w repo, bez CMS-a
-i bez panelu admina.
+Osobisty blog o rynku nieruchomości widzianym od środka branży — analizy, prawo,
+technologia i design. Zbudowany na [Astro](https://astro.build): treść to pliki
+Markdown w repo, bez CMS-a i bez panelu admina.
 
 ## Szybki start
 
@@ -23,7 +23,7 @@ npm run preview   # podgląd builda produkcyjnego z dist/
    title: "Tytuł artykułu"
    slug: "tytul-artykulu"          # trafia do URL-a: /<category>/<slug>/
    date: 2026-08-13
-   category: "biznes"               # nieruchomosci | architektura | biznes | proptech | conttech
+   category: "analizy"              # analizy | prawo | technologia | design
    tags: ["SPV", "cashflow"]        # 0-4 tagi, trafiają na strony /tag/<tag>/
    excerpt: "Jedno-dwa zdania streszczenia — widoczne na liście i w meta description."
    author: "Sebastian"
@@ -39,7 +39,7 @@ npm run preview   # podgląd builda produkcyjnego z dist/
 5. Czas czytania liczy się automatycznie z liczby słów — nie trzeba go wpisywać
    ręcznie (frontmatter dopuszcza opcjonalne pole `readingTime`, gdybyś kiedyś
    chciał nadpisać wyliczoną wartość).
-6. Kategorię trzeba wybrać z zamkniętej listy pięciu wartości zdefiniowanej w
+6. Kategorię trzeba wybrać z zamkniętej listy czterech wartości zdefiniowanej w
    `src/lib/categories.ts` — tam też zmienisz etykiety lub opisy kategorii,
    gdyby się okazały niedoszlifowane.
 
@@ -51,10 +51,12 @@ frontmatterze, więc możesz swobodnie zmieniać/organizować nazwy plików w re
 - `/` — hero dwukolumnowy: intro po lewej, 3-4 najnowsze artykuły (skrótowo,
   bez excerptów) po prawej.
 - `/blog/` — pełna lista wszystkich artykułów, z zakładkami kategorii u góry.
-- `/<kategoria>/` — ta sama lista, przefiltrowana do jednej kategorii (zakładki
+- `/kategoria/<slug>/` — ta sama lista, przefiltrowana do jednej kategorii (zakładki
   na `/blog/` i na stronach kategorii to jeden spójny mechanizm filtrowania —
-  5 kategorii zdefiniowanych w `src/lib/categories.ts`, poza głównym navbarem).
-- `/<kategoria>/<slug>/` — pojedynczy artykuł, na końcu 2-3 powiązane (ta sama kategoria).
+  4 kategorie zdefiniowane w `src/lib/categories.ts`: `analizy`, `prawo`,
+  `technologia`, `design`, poza głównym navbarem).
+- `/<kategoria>/<slug>/` — pojedynczy artykuł (permalink używa sluga kategorii
+  bezpośrednio, bez prefiksu `/kategoria/`), na końcu 2-3 powiązane (ta sama kategoria).
 - `/tag/<tag>/` — lista artykułów z danym tagiem.
 - `/o-mnie/` — bio, link do Raisly i LinkedIn.
 - `/kontakt/` — link `mailto:` i LinkedIn, bez formularza/backendu.
@@ -67,9 +69,9 @@ Nawigacja główna to tylko trzy pozycje: Blog / O mnie / Kontakt
 
 1. **Domena** — w `astro.config.mjs` zmień `SITE_URL` (obecnie placeholder) na
    docelowy adres. Wpływa na canonical URL-e, sitemapę, RSS i linki OG.
-2. **Kontakt i social** — w `src/consts.ts` podmień `RAISLY_URL`,
-   `LINKEDIN_URL` i `CONTACT_EMAIL` na prawdziwe adresy (oznaczone `// TODO`).
-4. **Alt text obrazków** — jeśli dodajesz zdjęcia do treści postów, zawsze
+2. **Raisly** — w `src/consts.ts` podmień `RAISLY_URL` na prawdziwy adres
+   (oznaczony `// TODO`). LinkedIn i e-mail kontaktowy są już docelowe.
+3. **Alt text obrazków** — jeśli dodajesz zdjęcia do treści postów, zawsze
    dopisz opisowy `alt`, np. `![Wykres cen mieszkań w Warszawie 2020-2026](...)`
    zamiast pustego atrybutu.
 
@@ -82,7 +84,7 @@ Nawigacja główna to tylko trzy pozycje: Blog / O mnie / Kontakt
   w stylu bloga, nic nie trzeba przygotowywać ręcznie.
 - Schema.org `Article` (JSON-LD) z `author`, `datePublished`, `headline` na
   każdym artykule; `WebSite` na pozostałych stronach.
-- Czytelne URL-e: `/biznes/jak-rozliczyc-transze-bankowa/`, żadnych `?id=`.
+- Czytelne URL-e: `/prawo/jak-rozliczyc-transze-bankowa/`, żadnych `?id=`.
 - Jeden `<h1>` na stronę, hierarchia H1→H2→H3 w treści Markdown.
 
 ## Design

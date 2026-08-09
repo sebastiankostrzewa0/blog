@@ -1,6 +1,6 @@
-// Single source of truth for the five content categories: their slug (used in
-// URLs and frontmatter), display label, and a one-line description used on
-// category index pages and in meta descriptions.
+// Single source of truth for content categories: their slug (used in URLs and
+// frontmatter), display label, and a one-line description used on category
+// index pages and in meta descriptions.
 export interface CategoryMeta {
   slug: string;
   label: string;
@@ -9,39 +9,24 @@ export interface CategoryMeta {
 
 export const CATEGORIES: readonly CategoryMeta[] = [
   {
-    slug: 'nieruchomosci',
-    label: 'Nieruchomości',
-    description: 'Rynek, inwestycje, analizy, trendy cenowe i prawo nieruchomości w praktyce.',
+    slug: 'analizy',
+    label: 'Analizy',
+    description: 'Rynek mieszkaniowy w liczbach — dane, trendy, struktury inwestycyjne i to, co za nimi stoi.',
   },
   {
-    slug: 'architektura',
-    label: 'Architektura',
-    description: 'Projektowanie, urbanistyka, trendy budowlane i studia przypadków.',
+    slug: 'prawo',
+    label: 'Prawo i regulacje',
+    description: 'Zmiany w prawie i formalności, które branża zauważa dopiero, gdy jest za późno na reakcję.',
   },
   {
-    slug: 'biznes',
-    label: 'Biznes',
-    description: 'Zarządzanie firmą deweloperską i budowlaną, finansowanie, SPV, cashflow, sprzedaż.',
+    slug: 'technologia',
+    label: 'Technologia',
+    description: 'Narzędzia, automatyzacja i AI w nieruchomościach oraz na placu budowy.',
   },
   {
-    slug: 'proptech',
-    label: 'PropTech',
-    description: 'Technologia w nieruchomościach — narzędzia, automatyzacja, AI w branży.',
-  },
-  {
-    slug: 'conttech',
-    label: 'ContTech',
-    description: 'Technologia w budownictwie — cyfryzacja placu budowy, BIM, IoT na budowie.',
-  },
-  {
-    slug: 'dane',
-    label: 'Dane',
-    description: 'Rynek mieszkaniowy w liczbach — pozwolenia na budowę, ceny transakcyjne, GUS i dane.gov.pl.',
-  },
-  {
-    slug: 'kontrowersje',
-    label: 'Kontrowersje',
-    description: 'Krytyczne spojrzenie na praktyki branży — marketing, standardy, to, co się nie mówi wprost.',
+    slug: 'design',
+    label: 'Architektura i Design',
+    description: 'Projektowanie i decyzje architektoniczne, które później kosztują albo oszczędzają miliony w realizacji.',
   },
 ] as const;
 

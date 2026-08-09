@@ -2,7 +2,7 @@
 title: "Rynek SPV w Polsce — dlaczego mali deweloperzy wybierają tę strukturę"
 slug: "rynek-spv-w-polsce"
 date: 2026-06-05
-category: "nieruchomosci"
+category: "analizy"
 tags: ["SPV", "finansowanie"]
 excerpt: "Spółka celowa na jedną inwestycję to dziś standard, nie wyjątek — nawet u deweloperów realizujących 2-3 projekty rocznie. Powód jest prostszy niż się wydaje."
 author: "Sebastian"
