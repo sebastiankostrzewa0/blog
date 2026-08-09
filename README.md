@@ -9,9 +9,13 @@ Markdown w repo, bez CMS-a i bez panelu admina.
 ```bash
 npm install
 npm run dev       # http://localhost:4321 - pokazuje też posty z draft: true
-npm run build     # typecheck + build statyczny do dist/ (drafty pominięte)
-npm run preview   # podgląd builda produkcyjnego z dist/
+npm run build     # typecheck + build do dist/ i .vercel/output/ (drafty pominięte)
+npm run preview   # podgląd builda produkcyjnego
 ```
+
+Do lokalnego zapisu do newslettera potrzebny jest plik `.env` - patrz sekcja
+Newsletter niżej. Bez niego endpoint `/api/subscribe` odpowiada kontrolowanym
+błędem zamiast się wywalać.
 
 ## Jak dodać nowy post
 
@@ -58,12 +62,15 @@ frontmatterze, więc możesz swobodnie zmieniać/organizować nazwy plików w re
 - `/<kategoria>/<slug>/` - pojedynczy artykuł (permalink używa sluga kategorii
   bezpośrednio, bez prefiksu `/kategoria/`), na końcu 2-3 powiązane (ta sama kategoria).
 - `/tag/<tag>/` - lista artykułów z danym tagiem.
+- `/newsletter/` - dłuższa wersja sekcji zapisu z homepage.
 - `/o-mnie/` - bio, link do Raisly i LinkedIn.
 - `/kontakt/` - link `mailto:` i LinkedIn, bez formularza/backendu.
+- `/polityka-prywatnosci/` - RODO, wymagane przy zbieraniu e-maili (`noindex`
+  do czasu uzupełnienia placeholderów - patrz sekcja Newsletter poniżej).
 - `/rss.xml`, `/sitemap-index.xml`, `/robots.txt` - generowane automatycznie.
 
-Nawigacja główna to tylko trzy pozycje: Blog / O mnie / Kontakt
-(`src/consts.ts` → `NAV_LINKS`).
+Nawigacja główna: Blog / Newsletter / O mnie / Kontakt (`src/consts.ts` →
+`NAV_LINKS`).
 
 ## Zanim wdrożysz na produkcję
 
@@ -99,12 +106,51 @@ Paleta i fonty jako custom properties w `src/styles/global.css`:
 - Kategorie jako małe mono-labelki (`CategoryBadge.astro`).
 - Menu mobilne to czysty CSS (`<details>/<summary>`) - działa bez JavaScriptu.
 
+## Newsletter (zbieranie adresów - bez wysyłki)
+
+Na tym etapie formularz newslettera (homepage + `/newsletter/`) tylko zapisuje
+adresy e-mail do Supabase. Nie ma jeszcze wysyłki maili ani double opt-in -
+to świadomie osobny, kolejny etap.
+
+**Setup:**
+
+1. Załóż darmowy projekt na [supabase.com](https://supabase.com), region
+   **EU / Frankfurt** (istotne z uwagi na RODO).
+2. W SQL Editorze projektu uruchom `supabase/schema.sql` - tworzy tabelę
+   `newsletter_subscribers` (email unikalny, `confirmed` zawsze `false` na
+   razie, zarezerwowane pod przyszły double opt-in).
+3. Skopiuj `Project URL` i `anon public` key z Project Settings → API.
+4. Lokalnie: skopiuj `.env.example` do `.env` i wklej tam te wartości.
+   Na Vercelu: dodaj `SUPABASE_URL` i `SUPABASE_ANON_KEY` jako zmienne
+   środowiskowe projektu (Settings → Environment Variables).
+
+**Jak to działa:** `src/pages/api/subscribe.ts` (jedyny endpoint w projekcie
+renderowany on-demand, nie w buildzie) waliduje e-mail i zgodę po stronie
+serwera, odrzuca ciszej boty przez honeypot, i wywołuje REST API Supabase
+bezpośrednio przez `fetch` (`src/lib/newsletter.ts`) - bez klienta
+`@supabase/supabase-js`, żeby nie dokładać zależności do jednego insertu.
+Duplikat e-maila (unique constraint) Supabase zwraca jako 409, co endpoint
+tłumaczy na przyjazny komunikat "już jesteś zapisany/a", nie błąd.
+
+Zanim włączysz zapisy na produkcji: uzupełnij `/polityka-prywatnosci/`
+(placeholdery `[...]` w treści) i usuń `noindex` z tej strony w
+`src/pages/polityka-prywatnosci.astro`.
+
+**Celowo NIE zrobione na tym etapie:** integracja z dostawcą wysyłki
+(Buttondown/Resend/Mailchimp), potwierdzanie maila (double opt-in), panel do
+przeglądania subskrybentów - listę i tak widać w panelu Supabase.
+
 ## Deploy (Vercel)
 
-Build jest w pełni statyczny (`output: "static"` w `astro.config.mjs`) - Vercel
-wykrywa Astro automatycznie, `vercel.json` w repo tylko to potwierdza jawnie
-(`buildCommand: npm run build`, `outputDirectory: dist`). Wystarczy podłączyć
-repo w Vercelu; nie jest potrzebny żaden adapter ani zmienne środowiskowe.
+Strona jest w większości statyczna, ale endpoint zapisu do newslettera
+potrzebuje serwera w czasie żądania, więc projekt używa adaptera
+`@astrojs/vercel` (`output: "static"` + `adapter: vercel()` w
+`astro.config.mjs`) - tylko `src/pages/api/subscribe.ts` ma
+`export const prerender = false`, reszta stron nadal jest prerenderowana
+przy buildzie. `astro build` produkuje wynik od razu w formacie Vercel
+Build Output API (`.vercel/output/`), więc `vercel.json` nie ustawia już
+`buildCommand`/`outputDirectory` - wystarczy podłączyć repo i dodać zmienne
+środowiskowe z sekcji Newsletter powyżej.
 
 ## Regeneracja ikon
 
@@ -117,5 +163,6 @@ node scripts/gen-icons.mjs
 ## Czego tu celowo nie ma
 
 Zgodnie z założeniami: brak CMS-a i panelu admina (posty edytuje się jako
-pliki `.md`), brak newslettera/zapisu i brak systemu komentarzy - to osobne
-etapy na później.
+pliki `.md`), brak systemu komentarzy. Newsletter zbiera adresy (patrz wyżej),
+ale bez wysyłki, potwierdzania maila i panelu subskrybentów - to celowo
+osobne, kolejne etapy.

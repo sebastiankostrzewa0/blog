@@ -13,6 +13,7 @@ export const CONTACT_EMAIL = 'sebastiankostrzewa0@gmail.com';
 
 export const NAV_LINKS = [
   { href: '/blog/', label: 'Blog' },
+  { href: '/newsletter/', label: 'Newsletter' },
   { href: '/o-mnie/', label: 'O mnie' },
   { href: '/kontakt/', label: 'Kontakt' },
 ] as const;

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+---
+
+<BaseLayout
+  title="Newsletter"
+  description="Zapisz się na newsletter - mail tylko wtedy, gdy naprawdę mam coś do powiedzenia, bez sztywnego grafiku publikacji."
+>
+  <section class="wrap newsletter-page">
+    <header class="newsletter-page__header">
+      <p class="eyebrow">Newsletter</p>
+      <h1>Zero szumu. Mail, kiedy jest coś warte przeczytania.</h1>
+      <p class="newsletter-page__lede">
+        Nie prowadzę tego newslettera, żeby utrzymać rytm publikacji. Prowadzę go, żeby
+        przekazać Ci artykuł, dane albo obserwację, zanim zniknie w przewijaniu LinkedIna.
+        Jeśli wolisz czekać na coś konkretnego zamiast dostawać treść na siłę co tydzień -
+        to jest dokładnie ten format.
+      </p>
+    </header>
+
+    <NewsletterForm />
+  </section>
+</BaseLayout>
+
+<style>
+  .newsletter-page {
+    padding-block: clamp(2.5rem, 5vw, 5rem);
+  }
+
+  .newsletter-page__header {
+    max-width: 46rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .newsletter-page__lede {
+    color: var(--color-fg-muted);
+    font-size: 1.1rem;
+  }
+</style>

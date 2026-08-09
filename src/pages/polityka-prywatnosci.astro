@@ -1,0 +1,218 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { CONTACT_EMAIL } from '@/consts';
+---
+
+<BaseLayout
+  title="Polityka prywatności"
+  description="Jak przetwarzam dane osobowe w związku z zapisem do newslettera i działaniem tego serwisu."
+  noindex
+>
+  <section class="wrap policy">
+    <p class="eyebrow">Dokument formalny</p>
+    <h1>Polityka prywatności</h1>
+    <p class="policy__updated">Ostatnia aktualizacja: [DATA - uzupełnij przy publikacji]</p>
+
+    <div class="prose policy__body">
+      <h2><span class="policy__num">01</span> Administrator danych</h2>
+      <p>Administratorem danych osobowych przetwarzanych w ramach tego serwisu jest:</p>
+      <p>
+        <strong>Sebastian Kostrzewa</strong><br />
+        [Uzupełnij: adres do korespondencji, jeśli chcesz go podawać publicznie - nie jest to
+        obowiązkowe dla osoby fizycznej prowadzącej blog prywatnie]<br />
+        E-mail: {CONTACT_EMAIL}
+      </p>
+      <p>
+        We wszystkich sprawach dotyczących ochrony danych osobowych możesz się ze mną
+        skontaktować mailowo pod adresem powyżej. Odpowiadam w ciągu 30 dni kalendarzowych.
+      </p>
+
+      <h2><span class="policy__num">02</span> W jakim celu zbieram dane</h2>
+      <h3>Zapis do newslettera</h3>
+      <p>
+        Adres e-mail podany w formularzu zapisu zbieram wyłącznie w celu przyszłej wysyłki
+        newslettera - informacji o nowych artykułach i treściach publikowanych na blogu. Zapis
+        jest w pełni dobrowolny i wymaga wyraźnej zgody (checkbox w formularzu).
+      </p>
+      <p>
+        Obecnie serwis znajduje się na etapie zbierania zgłoszeń - adresy e-mail są
+        przechowywane, ale wysyłka newslettera jeszcze nie została uruchomiona. Gdy to nastąpi,
+        poinformuję o tym subskrybentów, a niniejsza polityka zostanie zaktualizowana o
+        szczegóły dotyczące dostawcy usługi wysyłkowej.
+      </p>
+      <h3>Logi serwera i hosting</h3>
+      <p>
+        Infrastruktura hostingowa (Vercel) automatycznie zapisuje logi zawierające adres IP,
+        nagłówki przeglądarki (user agent) i odwiedzone ścieżki URL. Dane te są niezbędne do
+        prawidłowego działania serwisu, diagnozowania błędów i zapewnienia bezpieczeństwa.
+      </p>
+      <p>
+        [Jeśli wdrożysz analitykę - uzupełnij ten akapit, np.: "Korzystam z Plausible
+        Analytics - narzędzia, które nie ustawia plików cookie i nie zbiera danych
+        pozwalających zidentyfikować konkretną osobę. Zbierane są wyłącznie zagregowane,
+        anonimowe statystyki ruchu."]
+      </p>
+
+      <h2><span class="policy__num">03</span> Podstawa prawna przetwarzania</h2>
+      <p>
+        Dane osobowe przetwarzam wyłącznie wtedy, gdy istnieje ku temu odpowiednia podstawa
+        prawna zgodnie z art. 6 RODO:
+      </p>
+      <ul>
+        <li>
+          <strong>Art. 6 ust. 1 lit. a - zgoda:</strong> zapis do newslettera (w pełni
+          dobrowolny, możliwy do wycofania w dowolnym momencie poprzez wiadomość mailową na
+          adres podany w sekcji 01).
+        </li>
+        <li>
+          <strong>Art. 6 ust. 1 lit. f - prawnie uzasadniony interes administratora:</strong>
+          logi serwera niezbędne do bezpieczeństwa i diagnostyki technicznej serwisu.
+        </li>
+      </ul>
+
+      <h2><span class="policy__num">04</span> Jakie dane są zbierane</h2>
+      <ul>
+        <li><strong>Dane kontaktowe:</strong> adres e-mail podany przy zapisie do newslettera.</li>
+        <li>
+          <strong>Dane techniczne:</strong> adres IP i nagłówki HTTP zapisywane automatycznie
+          przez infrastrukturę hostingową (logi Vercel).
+        </li>
+      </ul>
+      <p>
+        Serwis nie zbiera danych szczególnej kategorii w rozumieniu art. 9 RODO (danych o
+        zdrowiu, poglądach politycznych, danych biometrycznych itp.) i nie prowadzi
+        profilowania.
+      </p>
+
+      <h2><span class="policy__num">05</span> Jak długo przechowuję dane</h2>
+      <ul>
+        <li>
+          <strong>Zapis do newslettera:</strong> do momentu wypisania się lub wycofania zgody.
+          Po otrzymaniu takiej informacji adres e-mail jest usuwany niezwłocznie, nie później
+          niż w ciągu 14 dni.
+        </li>
+        <li><strong>Logi serwera (Vercel):</strong> 30 dni - domyślny okres retencji logów Vercel.</li>
+      </ul>
+
+      <h2><span class="policy__num">06</span> Komu przekazuję dane</h2>
+      <p>
+        Dane osobowe mogą być przetwarzane przez następujących podwykonawców, z którymi łączą
+        mnie warunki przetwarzania zgodne z RODO:
+      </p>
+      <ul>
+        <li>
+          <strong>Supabase Inc.</strong> - baza danych, w której przechowywana jest lista
+          adresów e-mail zapisanych do newslettera. Serwery zlokalizowane w regionie UE
+          (Frankfurt).
+        </li>
+        <li><strong>Vercel Inc.</strong> - hosting serwisu, logi serwera.</li>
+      </ul>
+      <p>
+        Poza wymienionymi podmiotami dane nie są udostępniane żadnym stronom trzecim, chyba że
+        wymaga tego prawo (np. na pisemne żądanie uprawnionych organów państwowych).
+      </p>
+      <p>
+        Gdy uruchomię faktyczną wysyłkę newslettera, ta sekcja zostanie zaktualizowana o
+        dostawcę usługi wysyłkowej (np. Buttondown lub Resend) wraz z informacją o lokalizacji
+        przetwarzania danych.
+      </p>
+
+      <h2><span class="policy__num">07</span> Twoje prawa</h2>
+      <p>Jako osoba, której dane dotyczą, masz prawo do:</p>
+      <ul>
+        <li><strong>dostępu do danych</strong> - możesz zapytać, czy i jakie Twoje dane przechowuję,</li>
+        <li><strong>sprostowania danych</strong> - możesz zażądać poprawienia nieprawidłowych danych,</li>
+        <li>
+          <strong>usunięcia danych</strong> ("prawo do bycia zapomnianym") - możesz zażądać
+          usunięcia swojego adresu e-mail z bazy w dowolnym momencie,
+        </li>
+        <li><strong>ograniczenia przetwarzania</strong> w sytuacjach przewidzianych przez RODO,</li>
+        <li><strong>przenoszenia danych</strong> w ustrukturyzowanym, powszechnie używanym formacie,</li>
+        <li>
+          <strong>sprzeciwu</strong> wobec przetwarzania opartego na moim prawnie uzasadnionym
+          interesie,
+        </li>
+        <li>
+          <strong>wycofania zgody</strong> w dowolnym momencie - bez wpływu na zgodność z
+          prawem przetwarzania dokonanego przed wycofaniem.
+        </li>
+      </ul>
+      <p>
+        Aby skorzystać z któregokolwiek z powyższych praw, napisz na adres podany w sekcji 01.
+        Odpowiem w ciągu 30 dni kalendarzowych.
+      </p>
+
+      <h2><span class="policy__num">08</span> Cookies</h2>
+      <p>
+        Serwis w obecnej formie nie ustawia żadnych własnych plików cookie. Nie ma systemu
+        logowania, nie są zapisywane sesje użytkownika ani preferencje.
+      </p>
+      <p>
+        [Jeśli dodasz analitykę z cookies (np. Google Analytics) - ten punkt trzeba rozbudować
+        o baner zgody i listę konkretnych plików cookie. Przy Plausible lub podobnym narzędziu
+        bez cookies ten punkt może zostać bez zmian.]
+      </p>
+
+      <h2><span class="policy__num">09</span> Prawo do skargi do organu nadzorczego</h2>
+      <p>
+        Jeśli uważasz, że przetwarzanie Twoich danych osobowych narusza przepisy RODO, masz
+        prawo wniesienia skargi do:
+      </p>
+      <p>
+        <strong>Prezesa Urzędu Ochrony Danych Osobowych (PUODO)</strong><br />
+        ul. Stawki 2, 00-193 Warszawa<br />
+        tel. 22 531 03 00<br />
+        <a href="mailto:kancelaria@uodo.gov.pl">kancelaria@uodo.gov.pl</a><br />
+        <a href="https://uodo.gov.pl" target="_blank" rel="noopener noreferrer">https://uodo.gov.pl</a>
+      </p>
+
+      <h2><span class="policy__num">10</span> Zmiany niniejszej polityki</h2>
+      <p>
+        Zastrzegam sobie prawo do wprowadzania zmian w niniejszej polityce prywatności - w
+        szczególności w momencie uruchomienia faktycznej wysyłki newslettera przez
+        zewnętrznego dostawcę. Wszelkie zmiany będą publikowane na tej stronie z
+        zaktualizowaną datą w nagłówku. O istotnych zmianach dotyczących sposobu przetwarzania
+        danych osób zapisanych do newslettera poinformuję subskrybentów bezpośrednio.
+      </p>
+      <p>
+        Niniejszy dokument sporządzony jest zgodnie z wymogami Rozporządzenia Parlamentu
+        Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO). Nie stanowi
+        umowy ani oferty handlowej.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .policy {
+    padding-block: clamp(2.5rem, 5vw, 5rem);
+    max-width: var(--measure);
+  }
+
+  .policy__updated {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-fg-muted);
+    margin: 0.75rem 0 0;
+  }
+
+  .policy__body {
+    margin-top: 2.5rem;
+  }
+
+  .policy__body h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: clamp(1.3rem, 1.8vw + 1rem, 1.75rem);
+  }
+
+  .policy__num {
+    font-family: var(--font-mono);
+    color: var(--color-signal);
+  }
+
+  .policy__body h3 {
+    margin-top: 1.6em;
+  }
+</style>

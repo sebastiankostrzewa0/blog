@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CompactPostList from '@/components/CompactPostList.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
 import { getCollection } from 'astro:content';
 import { isPublished } from '@/lib/publishing';
 
@@ -38,9 +39,17 @@ const latest = posts.slice(0, 4);
       )}
     </div>
   </section>
+
+  <section class="wrap newsletter-section">
+    <NewsletterForm />
+  </section>
 </BaseLayout>
 
 <style>
+  .newsletter-section {
+    padding-block: 0 clamp(3rem, 6vw, 5rem);
+  }
+
   .hero {
     position: relative;
     overflow: hidden;
