@@ -1,74 +1,54 @@
 ---
-// Two-column newsletter sign-up: copy + form on the left, a short list of
-// what subscribers get on the right. Used on the homepage and on /newsletter.
-const perks = [
-  'Mail tylko wtedy, gdy naprawdę mam coś do powiedzenia, nie w narzuconym rytmie',
-  'Zero treści sponsorowanych, zero płatnych poleceń',
-  'Artykuł trafia do Ciebie, zanim wrzucę go na LinkedIn',
-  'Czasem krótki komentarz do tego, co akurat dzieje się na rynku',
-  'Odpisujesz wprost na maila, jeśli chcesz podyskutować',
-];
+// Newsletter sign-up section: kicker, copy, and the form itself, framed in
+// a border. Used on the homepage and on /newsletter.
 ---
 
 <section class="newsletter">
-  <div class="newsletter__grid">
-    <div class="newsletter__col newsletter__col--form">
-      <p class="newsletter__kicker">// NEWSLETTER</p>
-      <h2>Piszę, kiedy mam coś do powiedzenia.</h2>
-      <p class="newsletter__text">
-        Bez sztywnego grafiku publikacji. Zapisz się, a dostaniesz maila w dniu, w którym
-        opublikuję coś, co uważam za warte Twojego czasu - dane z rynku, komentarz do zmian
-        w prawie albo obserwację, która nie zmieściła się w jednym poście na LinkedInie.
+  <div class="newsletter__col">
+    <p class="newsletter__kicker">// NEWSLETTER</p>
+    <h2>Piszę, kiedy mam coś do powiedzenia.</h2>
+    <p class="newsletter__text">
+      Bez sztywnego grafiku publikacji. Zapisz się, a dostaniesz maila w dniu, w którym
+      opublikuję coś, co uważam za warte Twojego czasu - dane z rynku, komentarz do zmian
+      w prawie albo obserwację, która nie zmieściła się w jednym poście na LinkedInie.
+    </p>
+
+    <form class="newsletter__form" data-newsletter-form novalidate>
+      <div class="newsletter__hp" aria-hidden="true">
+        <label for="newsletter-website">Strona internetowa</label>
+        <input type="text" id="newsletter-website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <label class="visually-hidden" for="newsletter-email">Adres e-mail</label>
+      <input
+        class="newsletter__input"
+        type="email"
+        id="newsletter-email"
+        name="email"
+        placeholder="twoj@email.pl"
+        autocomplete="email"
+        required
+      />
+
+      <label class="newsletter__consent">
+        <input type="checkbox" name="consent" required />
+        <span>
+          Zgadzam się na przetwarzanie mojego adresu e-mail w celu wysyłki newslettera,
+          zgodnie z <a href="/polityka-prywatnosci">polityką prywatności</a>.
+        </span>
+      </label>
+
+      <button type="submit" class="btn btn--accent newsletter__submit">Zapisz się</button>
+
+      <p class="newsletter__fineprint">
+        Zapisując się, akceptujesz <a href="/polityka-prywatnosci">politykę prywatności</a>.
+        Możesz się wypisać w każdej chwili.
       </p>
 
-      <form class="newsletter__form" data-newsletter-form novalidate>
-        <div class="newsletter__hp" aria-hidden="true">
-          <label for="newsletter-website">Strona internetowa</label>
-          <input type="text" id="newsletter-website" name="website" tabindex="-1" autocomplete="off" />
-        </div>
+      <p class="newsletter__status" data-newsletter-status role="alert" hidden></p>
+    </form>
 
-        <label class="visually-hidden" for="newsletter-email">Adres e-mail</label>
-        <input
-          class="newsletter__input"
-          type="email"
-          id="newsletter-email"
-          name="email"
-          placeholder="twoj@email.pl"
-          autocomplete="email"
-          required
-        />
-
-        <label class="newsletter__consent">
-          <input type="checkbox" name="consent" required />
-          <span>
-            Zgadzam się na przetwarzanie mojego adresu e-mail w celu wysyłki newslettera,
-            zgodnie z <a href="/polityka-prywatnosci">polityką prywatności</a>.
-          </span>
-        </label>
-
-        <button type="submit" class="btn btn--accent newsletter__submit">Zapisz się</button>
-
-        <p class="newsletter__fineprint">
-          Zapisując się, akceptujesz <a href="/polityka-prywatnosci">politykę prywatności</a>.
-          Możesz się wypisać w każdej chwili.
-        </p>
-
-        <p class="newsletter__status" data-newsletter-status role="alert" hidden></p>
-      </form>
-
-      <p class="newsletter__success" data-newsletter-success hidden></p>
-    </div>
-
-    <div class="newsletter__col newsletter__col--perks">
-      <p class="newsletter__kicker">// CO DOSTAJESZ</p>
-      <ul class="newsletter__perks">
-        {perks.map((perk) => (
-          <li>
-            <span class="newsletter__arrow" aria-hidden="true">→</span> {perk}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <p class="newsletter__success" data-newsletter-success hidden></p>
   </div>
 </section>
 
@@ -150,19 +130,11 @@ const perks = [
 <style>
   .newsletter {
     border: 1px solid var(--color-ink);
-  }
-
-  .newsletter__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    max-width: 40rem;
   }
 
   .newsletter__col {
     padding: clamp(1.75rem, 4vw, 3rem);
-  }
-
-  .newsletter__col--form {
-    border-right: 1px solid var(--color-ink);
   }
 
   .newsletter__kicker {
@@ -175,7 +147,6 @@ const perks = [
 
   .newsletter__text {
     color: var(--color-fg-muted);
-    max-width: 42rem;
   }
 
   .newsletter__form {
@@ -266,39 +237,5 @@ const perks = [
     text-transform: uppercase;
     font-size: 1.3rem;
     margin-top: 1.5rem;
-  }
-
-  .newsletter__perks {
-    list-style: none;
-    margin: 1.5rem 0 0;
-    padding: 0;
-  }
-
-  .newsletter__perks li {
-    display: flex;
-    gap: 0.6em;
-    padding-block: 0.9rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-grid) 45%, transparent);
-    color: var(--color-fg-muted);
-  }
-
-  .newsletter__perks li:last-child {
-    border-bottom: none;
-  }
-
-  .newsletter__arrow {
-    color: var(--color-signal);
-    flex: none;
-  }
-
-  @media (max-width: 48rem) {
-    .newsletter__grid {
-      grid-template-columns: 1fr;
-    }
-
-    .newsletter__col--form {
-      border-right: none;
-      border-bottom: 1px solid var(--color-ink);
-    }
   }
 </style>
