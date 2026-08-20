@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { RAISLY_URL, LINKEDIN_URL } from '@/consts';
+import photo from '@/assets/sebastian-kostrzewa.jpeg';
 ---
 
 <BaseLayout
@@ -11,37 +13,49 @@ import { RAISLY_URL, LINKEDIN_URL } from '@/consts';
     <p class="eyebrow">O mnie</p>
     <h1>Sebastian Kostrzewa</h1>
 
-    <div class="prose">
-      <p>
-        Jestem Sebastian - pracuję jako Project Manager w firmie deweloperskiej.
-        Ten blog to miejsce, gdzie piszę o branży nieruchomości tak, jak ją
-        widzę od środka: bez marketingowego lukru, z danymi tam, gdzie się da,
-        i z własnym zdaniem tam, gdzie dane nie wystarczą.
-      </p>
-      <p>
-        Interesuje mnie rynek mieszkaniowy w liczbach - pozwolenia na budowę,
-        ceny transakcyjne oraz dane z GUS. Interesują mnie zmiany
-        w prawie, które branża zauważa dopiero, gdy jest za późno na reakcję.
-        I interesuje mnie design - bo dobra architektura to nie tylko estetyka,
-        to też decyzje, które później kosztują (albo oszczędzają) miliony
-        w realizacji.
-      </p>
-      <p>
-        Nie piszę jako outsider. Widzę tę branżę z jej codziennej, praktycznej
-        strony - kosztorysy, harmonogramy, rozmowy, które nie trafiają
-        do żadnej prezentacji.
-      </p>
-      <p>
-        Poza tym blogiem buduję <a href={RAISLY_URL} target="_blank" rel="noopener noreferrer">Raisly</a> -
-        narzędzie dla deweloperów do zarządzania budżetem i dokumentacją inwestycji.
-        Jeśli zarządzasz kilkoma projektami naraz i excel przestał wystarczać,
-        zajrzyj tam. Ale to osobny rozdział - ten blog nie jest o Raisly, jest
-        o branży.
-      </p>
-      <p>
-        Znajdziesz mnie też na <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn</a> -
-        piszę tam krótsze wersje tego, co tutaj rozwijam szerzej.
-      </p>
+    <div class="about__grid">
+      <Image
+        class="about__photo"
+        src={photo}
+        alt="Sebastian Kostrzewa uśmiechnięty na branżowym evencie, w białej koszuli"
+        width={640}
+        height={956}
+        loading="eager"
+        fetchpriority="high"
+      />
+
+      <div class="prose">
+        <p>
+          Jestem Sebastian - pracuję jako Project Manager w firmie deweloperskiej.
+          Ten blog to miejsce, gdzie piszę o branży nieruchomości tak, jak ją
+          widzę od środka: bez marketingowego lukru, z danymi tam, gdzie się da,
+          i z własnym zdaniem tam, gdzie dane nie wystarczą.
+        </p>
+        <p>
+          Interesuje mnie rynek mieszkaniowy w liczbach - pozwolenia na budowę,
+          ceny transakcyjne oraz dane z GUS. Interesują mnie zmiany
+          w prawie, które branża zauważa dopiero, gdy jest za późno na reakcję.
+          I interesuje mnie design - bo dobra architektura to nie tylko estetyka,
+          to też decyzje, które później kosztują (albo oszczędzają) miliony
+          w realizacji.
+        </p>
+        <p>
+          Nie piszę jako outsider. Widzę tę branżę z jej codziennej, praktycznej
+          strony - kosztorysy, harmonogramy, rozmowy, które nie trafiają
+          do żadnej prezentacji.
+        </p>
+        <p>
+          Poza tym blogiem buduję <a href={RAISLY_URL} target="_blank" rel="noopener noreferrer">Raisly</a> -
+          narzędzie dla deweloperów do zarządzania budżetem i dokumentacją inwestycji.
+          Jeśli zarządzasz kilkoma projektami naraz i excel przestał wystarczać,
+          zajrzyj tam. Ale to osobny rozdział - ten blog nie jest o Raisly, jest
+          o branży.
+        </p>
+        <p>
+          Znajdziesz mnie też na <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">LinkedIn</a> -
+          piszę tam krótsze wersje tego, co tutaj rozwijam szerzej.
+        </p>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -49,6 +63,37 @@ import { RAISLY_URL, LINKEDIN_URL } from '@/consts';
 <style>
   .about {
     padding-block: clamp(2.5rem, 5vw, 5rem);
-    max-width: var(--measure);
+    max-width: 56rem;
+  }
+
+  .about__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3rem);
+    margin-top: 2.5rem;
+  }
+
+  .about__grid .prose {
+    max-width: 60ch;
+  }
+
+  .about__photo {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius);
+    object-fit: cover;
+  }
+
+  @media (min-width: 640px) {
+    .about__grid {
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .about__photo {
+      position: sticky;
+      top: clamp(1.5rem, 4vw, 3rem);
+    }
   }
 </style>
