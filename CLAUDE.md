@@ -26,20 +26,41 @@ zgodny ze schematem w `src/content.config.ts`):
 
 ## Automatyczna publikacja zaplanowanych postów
 
-Codziennie odpala się osobna, samodzielna sesja (Claude Code Remote
-Routine), która wykonuje dokładnie to:
+Codziennie o 6:00 UTC odpala się osobna, samodzielna sesja (Claude Code
+Remote Routine, `trig_01RQrtc3eyoLMe93UpYw65mW`), która wykonuje dokładnie
+to:
 
 1. Sklonuj/zaktualizuj repo (`add_repo` jeśli sesja go jeszcze nie ma),
    przełącz się na `claude/astro-blog-markdown-seo-5brx3n`, `git pull`.
-2. Przejrzyj `scheduled/*.md`. Dla każdego pliku porównaj pole `date`
-   z dzisiejszą datą (UTC). Plik jest "dojrzały", jeśli `date <= dziś`.
-3. Każdy dojrzały plik przenieś z `scheduled/<plik>.md` do
+2. Ustal listę "dojrzałych" plików **deterministycznie skryptem powłoki**,
+   nie na oko - 2.09.2026 pokazało, że poleganie na własnej ocenie dat
+   przez model zawodzi (routine zakończył się "sukcesem", ale nic nie
+   opublikował mimo dojrzałego posta). Użyj dokładnie tego wzorca:
+
+   ```bash
+   today=$(date -u +%Y-%m-%d)
+   for f in scheduled/*.md; do
+     base=$(basename "$f")
+     [ "$base" = "README.md" ] && continue
+     post_date=$(grep -m1 '^date:' "$f" | sed -E 's/^date:[[:space:]]*"?([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')
+     if [[ "$post_date" < "$today" || "$post_date" == "$today" ]]; then
+       echo "DUE: $f"
+     fi
+   done
+   ```
+
+   Porównanie stringów w formacie `YYYY-MM-DD` jest bezpieczne
+   leksykograficznie. Plik bez poprawnie sparsowanej daty to błąd do
+   zaraportowania, nie "jeszcze nie dojrzały".
+3. Każdy plik oznaczony `DUE` przenieś z `scheduled/<plik>.md` do
    `src/content/blog/<slug>.md` (nazwa = `slug` z frontmatter), usuwając
    go z `scheduled/`.
 4. Jeśli coś przeniesiono: `npm run build` żeby upewnić się, że strona
-   nadal się buduje, potem commit (w treści wymień tytuły opublikowanych
-   postów) i push bezpośrednio na branch - to zadanie ma stałą zgodę na
-   push bez pytania o potwierdzenie.
-5. Jeśli nic nie jest jeszcze gotowe do publikacji, nie rób nic i nie
+   nadal się buduje (uwaga na limit 220 znaków dla `excerpt`), potem
+   commit (w treści wymień tytuły opublikowanych postów) i push
+   bezpośrednio na branch - to zadanie ma stałą zgodę na push bez
+   pytania o potwierdzenie.
+5. Jeśli skrypt nie oznaczył żadnego pliku jako `DUE`, nie rób nic i nie
    commituj - cichy no-op.
-6. Nigdy nie przenoś posta, którego `date` jest wciąż w przyszłości.
+6. Nigdy nie przenoś posta, którego `post_date` jest wciąż w przyszłości
+   względem `today` ze skryptu.
