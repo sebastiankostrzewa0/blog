@@ -11,44 +11,46 @@ const { slug } = Astro.props;
 ---
 
 <section class="wrap comments" data-comments-slug={slug}>
-  <p class="section-label">Komentarze</p>
+  <div class="comments__inner">
+    <p class="section-label">Komentarze</p>
 
-  <ul class="comments__list" data-comments-list aria-live="polite">
-    <li class="comments__empty" data-comments-empty hidden>Bądź pierwszą osobą, która skomentuje.</li>
-  </ul>
+    <ul class="comments__list" data-comments-list aria-live="polite">
+      <li class="comments__empty" data-comments-empty hidden>Bądź pierwszą osobą, która skomentuje.</li>
+    </ul>
 
-  <form class="comments__form" data-comments-form novalidate>
-    <div class="comments__hp" aria-hidden="true">
-      <label for="comment-website">Strona internetowa</label>
-      <input type="text" id="comment-website" name="website" tabindex="-1" autocomplete="off" />
-    </div>
+    <form class="comments__form" data-comments-form novalidate>
+      <div class="comments__hp" aria-hidden="true">
+        <label for="comment-website">Strona internetowa</label>
+        <input type="text" id="comment-website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
 
-    <label class="visually-hidden" for="comment-name">Imię</label>
-    <input
-      class="comments__input"
-      type="text"
-      id="comment-name"
-      name="name"
-      placeholder="Imię"
-      autocomplete="name"
-      maxlength="80"
-      required
-    />
+      <label class="visually-hidden" for="comment-name">Imię</label>
+      <input
+        class="comments__input"
+        type="text"
+        id="comment-name"
+        name="name"
+        placeholder="Imię"
+        autocomplete="name"
+        maxlength="80"
+        required
+      />
 
-    <label class="visually-hidden" for="comment-content">Treść komentarza</label>
-    <textarea
-      class="comments__input comments__textarea"
-      id="comment-content"
-      name="content"
-      placeholder="Napisz komentarz..."
-      maxlength="2000"
-      rows="4"
-      required></textarea>
+      <label class="visually-hidden" for="comment-content">Treść komentarza</label>
+      <textarea
+        class="comments__input comments__textarea"
+        id="comment-content"
+        name="content"
+        placeholder="Napisz komentarz..."
+        maxlength="2000"
+        rows="4"
+        required></textarea>
 
-    <button type="submit" class="btn btn--accent comments__submit">Dodaj komentarz</button>
+      <button type="submit" class="btn btn--accent comments__submit">Dodaj komentarz</button>
 
-    <p class="comments__status" data-comments-status role="alert" hidden></p>
-  </form>
+      <p class="comments__status" data-comments-status role="alert" hidden></p>
+    </form>
+  </div>
 </section>
 
 <script>
@@ -173,6 +175,9 @@ const { slug } = Astro.props;
 <style>
   .comments {
     padding-block: clamp(2rem, 5vw, 4rem);
+  }
+
+  .comments__inner {
     max-width: var(--measure);
   }
 
