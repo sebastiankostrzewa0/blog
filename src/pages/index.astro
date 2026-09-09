@@ -9,7 +9,7 @@ const posts = (await getCollection('blog', isPublished)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-const latest = posts.slice(0, 4);
+const latest = posts.slice(0, 3);
 ---
 
 <BaseLayout>
