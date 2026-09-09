@@ -1,0 +1,290 @@
+---
+// Comments section for a single post. Comments are fetched and posted
+// client-side against /api/comments (the only other on-demand route in the
+// project besides /api/subscribe) - there's no build-time data here, since
+// a static page can't know about comments added after it was deployed.
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<section class="wrap comments" data-comments-slug={slug}>
+  <p class="section-label">Komentarze</p>
+
+  <ul class="comments__list" data-comments-list aria-live="polite">
+    <li class="comments__empty" data-comments-empty hidden>Bądź pierwszą osobą, która skomentuje.</li>
+  </ul>
+
+  <form class="comments__form" data-comments-form novalidate>
+    <div class="comments__hp" aria-hidden="true">
+      <label for="comment-website">Strona internetowa</label>
+      <input type="text" id="comment-website" name="website" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <label class="visually-hidden" for="comment-name">Imię</label>
+    <input
+      class="comments__input"
+      type="text"
+      id="comment-name"
+      name="name"
+      placeholder="Imię"
+      autocomplete="name"
+      maxlength="80"
+      required
+    />
+
+    <label class="visually-hidden" for="comment-content">Treść komentarza</label>
+    <textarea
+      class="comments__input comments__textarea"
+      id="comment-content"
+      name="content"
+      placeholder="Napisz komentarz..."
+      maxlength="2000"
+      rows="4"
+      required></textarea>
+
+    <button type="submit" class="btn btn--accent comments__submit">Dodaj komentarz</button>
+
+    <p class="comments__status" data-comments-status role="alert" hidden></p>
+  </form>
+</section>
+
+<script>
+  function formatCommentDate(iso: string): string {
+    return new Intl.DateTimeFormat('pl-PL', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(new Date(iso));
+  }
+
+  function renderComment(comment: { author_name: string; content: string; created_at: string }): HTMLLIElement {
+    const li = document.createElement('li');
+    li.className = 'comments__item';
+
+    const header = document.createElement('p');
+    header.className = 'comments__item-meta';
+    const author = document.createElement('span');
+    author.className = 'comments__item-author';
+    author.textContent = comment.author_name;
+    const date = document.createElement('span');
+    date.textContent = formatCommentDate(comment.created_at);
+    header.append(author, document.createTextNode(' · '), date);
+
+    const body = document.createElement('p');
+    body.className = 'comments__item-content';
+    body.textContent = comment.content;
+
+    li.append(header, body);
+    return li;
+  }
+
+  async function initComments(section: HTMLElement) {
+    const slug = section.dataset.commentsSlug;
+    if (!slug) return;
+
+    const list = section.querySelector<HTMLUListElement>('[data-comments-list]');
+    const emptyEl = section.querySelector<HTMLElement>('[data-comments-empty]');
+    const form = section.querySelector<HTMLFormElement>('[data-comments-form]');
+    const statusEl = section.querySelector<HTMLElement>('[data-comments-status]');
+    const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    const MESSAGES: Record<string, string> = {
+      invalid_name: 'Podaj imię (do 80 znaków).',
+      invalid_content: 'Napisz treść komentarza (do 2000 znaków).',
+      invalid_request: 'Coś poszło nie tak. Spróbuj ponownie.',
+      not_configured: 'Komentarze są chwilowo niedostępne. Spróbuj później.',
+      server_error: 'Coś poszło nie tak. Spróbuj ponownie za chwilę.',
+    };
+
+    function showError(message: string) {
+      if (!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.hidden = false;
+    }
+
+    function clearError() {
+      if (!statusEl) return;
+      statusEl.hidden = true;
+      statusEl.textContent = '';
+    }
+
+    try {
+      const res = await fetch(`/api/comments?slug=${encodeURIComponent(slug)}`);
+      const payload = await res.json();
+      if (payload.ok && Array.isArray(payload.comments)) {
+        if (payload.comments.length === 0) {
+          if (emptyEl) emptyEl.hidden = false;
+        } else {
+          payload.comments.forEach((comment: { author_name: string; content: string; created_at: string }) => {
+            list?.appendChild(renderComment(comment));
+          });
+        }
+      }
+    } catch {
+      // Silent - the form below still works even if the initial list fetch fails.
+    }
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearError();
+
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '').trim();
+      const content = String(data.get('content') ?? '').trim();
+      const website = String(data.get('website') ?? '');
+
+      if (submitBtn) submitBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/comments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, name, content, website }),
+        });
+        const payload = await res.json();
+
+        if (payload.ok) {
+          if (emptyEl) emptyEl.hidden = true;
+          list?.appendChild(
+            renderComment({ author_name: name, content, created_at: new Date().toISOString() }),
+          );
+          form.reset();
+        } else {
+          showError(MESSAGES[payload.error] ?? MESSAGES.server_error);
+        }
+      } catch {
+        showError(MESSAGES.server_error);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>('[data-comments-slug]')
+    .forEach(initComments);
+</script>
+
+<style>
+  .comments {
+    padding-block: clamp(2rem, 5vw, 4rem);
+    max-width: var(--measure);
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-fg-muted);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  .comments__list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .comments__empty {
+    color: var(--color-fg-muted);
+    font-size: 0.95rem;
+  }
+
+  .comments__item {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.25rem;
+  }
+
+  .comments__item-meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    color: var(--color-fg-muted);
+    margin: 0 0 0.4rem;
+  }
+
+  .comments__item-author {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .comments__item-content {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .comments__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    max-width: 32rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .comments__hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    left: -9999px;
+  }
+
+  .comments__input {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 0.85em 1em;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius);
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  .comments__textarea {
+    resize: vertical;
+    font-family: var(--font-body);
+  }
+
+  .comments__input:focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 1px;
+  }
+
+  .comments__submit {
+    align-self: flex-start;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+
+  .comments__submit:hover,
+  .comments__submit:focus-visible {
+    background: var(--color-signal);
+    border-color: var(--color-signal);
+  }
+
+  .comments__submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .comments__status {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-signal);
+    margin: 0;
+  }
+</style>

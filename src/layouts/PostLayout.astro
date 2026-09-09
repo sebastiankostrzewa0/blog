@@ -4,6 +4,7 @@ import { formatDate, readingTime, slugifyTag } from '@/lib/format';
 import { getCategoryMeta } from '@/lib/categories';
 import CategoryBadge from '@/components/CategoryBadge.astro';
 import PostCard from '@/components/PostCard.astro';
+import Comments from '@/components/Comments.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -67,6 +68,8 @@ const categoryMeta = getCategoryMeta(category);
       </div>
     </section>
   )}
+
+  <Comments slug={slug} />
 </BaseLayout>
 
 <style>

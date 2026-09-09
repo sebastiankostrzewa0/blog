@@ -13,9 +13,9 @@ npm run build     # typecheck + build do dist/ i .vercel/output/ (drafty pomini�
 npm run preview   # podgląd builda produkcyjnego
 ```
 
-Do lokalnego zapisu do newslettera potrzebny jest plik `.env` - patrz sekcja
-Newsletter niżej. Bez niego endpoint `/api/subscribe` odpowiada kontrolowanym
-błędem zamiast się wywalać.
+Do lokalnego zapisu do newslettera i komentarzy potrzebny jest plik `.env` -
+patrz sekcja Newsletter niżej. Bez niego endpointy `/api/subscribe` i
+`/api/comments` odpowiadają kontrolowanym błędem zamiast się wywalać.
 
 ## Jak dodać nowy post
 
@@ -140,17 +140,41 @@ Zanim włączysz zapisy na produkcji: uzupełnij `/polityka-prywatnosci/`
 (Buttondown/Resend/Mailchimp), potwierdzanie maila (double opt-in), panel do
 przeglądania subskrybentów - listę i tak widać w panelu Supabase.
 
+## Komentarze pod artykułami
+
+Każdy post ma na dole sekcję komentarzy (`src/components/Comments.astro`).
+Komentarze są publikowane od razu, bez moderacji - nie ma panelu do ich
+przeglądania czy usuwania, poza samym panelem Supabase.
+
+**Setup:** korzysta z tego samego projektu Supabase co newsletter - jeśli
+już wykonałeś kroki z sekcji Newsletter powyżej, `supabase/schema.sql`
+(tabela `comments`) i zmienne środowiskowe są już gotowe, nic dodatkowego
+nie trzeba robić.
+
+**Jak to działa:** `src/pages/api/comments.ts` (drugi i ostatni endpoint
+on-demand w projekcie) obsługuje `GET` (lista komentarzy dla danego `slug`)
+i `POST` (dodanie komentarza) - waliduje długość imienia/treści, sprawdza
+że `slug` odpowiada istniejącemu postowi, i odrzuca ciszej boty przez
+honeypot, tak samo jak formularz newslettera. `Comments.astro` dociąga
+listę komentarzy przez `fetch` po stronie klienta (statyczna strona nie
+może w buildzie znać komentarzy dodanych później) i po wysłaniu formularza
+dokleja nowy komentarz do listy bez przeładowania strony.
+
+**Celowo NIE zrobione na tym etapie:** moderacja/zatwierdzanie przed
+publikacją, odpowiedzi zagnieżdżone (thready), edycja/usuwanie własnego
+komentarza przez autora, powiadomienia mailowe o nowych komentarzach.
+
 ## Deploy (Vercel)
 
-Strona jest w większości statyczna, ale endpoint zapisu do newslettera
-potrzebuje serwera w czasie żądania, więc projekt używa adaptera
+Strona jest w większości statyczna, ale endpointy newslettera i komentarzy
+potrzebują serwera w czasie żądania, więc projekt używa adaptera
 `@astrojs/vercel` (`output: "static"` + `adapter: vercel()` w
-`astro.config.mjs`) - tylko `src/pages/api/subscribe.ts` ma
-`export const prerender = false`, reszta stron nadal jest prerenderowana
-przy buildzie. `astro build` produkuje wynik od razu w formacie Vercel
-Build Output API (`.vercel/output/`), więc `vercel.json` nie ustawia już
-`buildCommand`/`outputDirectory` - wystarczy podłączyć repo i dodać zmienne
-środowiskowe z sekcji Newsletter powyżej.
+`astro.config.mjs`) - tylko `src/pages/api/subscribe.ts` i
+`src/pages/api/comments.ts` mają `export const prerender = false`, reszta
+stron nadal jest prerenderowana przy buildzie. `astro build` produkuje
+wynik od razu w formacie Vercel Build Output API (`.vercel/output/`), więc
+`vercel.json` nie ustawia już `buildCommand`/`outputDirectory` - wystarczy
+podłączyć repo i dodać zmienne środowiskowe z sekcji Newsletter powyżej.
 
 ## Regeneracja ikon
 
@@ -163,6 +187,7 @@ node scripts/gen-icons.mjs
 ## Czego tu celowo nie ma
 
 Zgodnie z założeniami: brak CMS-a i panelu admina (posty edytuje się jako
-pliki `.md`), brak systemu komentarzy. Newsletter zbiera adresy (patrz wyżej),
-ale bez wysyłki, potwierdzania maila i panelu subskrybentów - to celowo
-osobne, kolejne etapy.
+pliki `.md`). Newsletter zbiera adresy (patrz wyżej), ale bez wysyłki,
+potwierdzania maila i panelu subskrybentów. Komentarze (patrz wyżej) działają
+bez moderacji i bez panelu do zarządzania nimi - to celowo osobne, kolejne
+etapy.
