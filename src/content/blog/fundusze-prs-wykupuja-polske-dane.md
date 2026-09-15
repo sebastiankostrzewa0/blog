@@ -1,7 +1,7 @@
 ---
 title: "Czy fundusze naprawdę wykupują Polskę? Dane mówią co innego niż nagłówki"
 slug: "fundusze-prs-wykupuja-polske-dane"
-date: 2026-09-16
+date: 2026-09-15
 category: "analizy"
 tags: ["PRS", "fundusze inwestycyjne", "najem instytucjonalny"]
 excerpt: "Politycy i media ostrzegają przed funduszami wykupującymi polskie mieszkania. Dane pokazują, że najem instytucjonalny to około 2% rynku, a dominują osoby prywatne kupujące drugie mieszkanie."
